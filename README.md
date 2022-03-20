@@ -40,6 +40,9 @@ In January 2022 [Google Analytics was deemed illegal in the EU](https://www.sixf
 In March 2022 [Google announced sunset July 1, 2023 and data deletion (+6 months) of Google Analytics Universal](https://www.searchenginejournal.com/google-sunsetting-universal-analytics-in-2023/442168/), with no data being kept essentialluy forcing users on to Google Analytics v4. This only complicates matters for the billions of sites using Google Analytics, and does not deal with the privacy requirements of EU users. 
 
 
+= Coding is not for everyone =
+
+Fathom are concentrating on their own development, and whilst their system will install on lot's of platforms and code abses, they have no current specific goals for developing the Wordpress plugin. We have decided to do some work on this, to help the community and make it easier to adopt Fathom through integrations to commonly used Wordpress plugins. 
 
 == Screenshots ==
 
