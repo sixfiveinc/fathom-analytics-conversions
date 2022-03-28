@@ -2,3 +2,9 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.facid_validation_error {
+    color: #c00;
+    font-weight: bold;
+    display: none;
+}
