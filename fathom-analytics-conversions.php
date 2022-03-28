@@ -36,6 +36,11 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'FATHOM_ANALYTICS_CONVERSIONS_VERSION', '1.0.0' );
+define( 'FAC4WP_PATH',       plugin_dir_path( __FILE__ ) );
+
+global $fac4wp_plugin_url, $fac4wp_plugin_basename;
+$fac4wp_plugin_url      = plugin_dir_url( __FILE__ );
+$fac4wp_plugin_basename = plugin_basename( __FILE__ );
 
 /**
  * The code that runs during plugin activation.

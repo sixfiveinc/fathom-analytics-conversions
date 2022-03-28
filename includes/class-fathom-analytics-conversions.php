@@ -74,6 +74,11 @@ class Fathom_Analytics_Conversions {
 		}
 		$this->plugin_name = 'fathom-analytics-conversions';
 
+        define( 'FAC4WP_OPTIONS', 'fac4wp-options' );
+        define( 'FAC4WP_OPTION_API_KEY_CODE', 'fac-api-key-code' );
+
+        define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -122,6 +127,11 @@ class Fathom_Analytics_Conversions {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fathom-analytics-conversions-public.php';
 
+        /**
+         * The core functions available on both the front-end and admin
+         */
+        require_once FAC4WP_PATH . '/includes/fac-core-functions.php';
+
 		$this->loader = new Fathom_Analytics_Conversions_Loader();
 
 	}
@@ -157,6 +167,26 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+        define( 'FAC4WP_ADMINSLUG', 'fac4wp-settings' );
+        define( 'FAC4WP_ADMIN_GROUP', 'fac4wp-admin-group' );
+
+        define( 'FAC4WP_ADMIN_GROUP_GENERAL', 'fac4wp-admin-group-general' );
+        define( 'FAC4WP_ADMIN_GROUP_API_KEY', 'fac4wp-admin-group-api-key' );
+        define( 'FAC4WP_ADMIN_GROUP_INTEGRATION', 'fac4wp-admin-group-integration' );
+
+        define( 'FAC4WP_PHASE_STABLE', 'fac4wp-phase-stable' );
+
+        // admin settings/sections
+        $this->loader->add_action( 'admin_init', $plugin_admin, 'fac4wp_admin_init' );
+        // admin menu page
+        $this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
+        // admin notices
+        $this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
+        // add meta box to CF7 form admin
+        $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_admin, 'fac_cf7_meta_box' );
+        // save FAC CF7 options
+        $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_cf7_save_options' );
+
 	}
 
 	/**
@@ -170,8 +200,13 @@ class Fathom_Analytics_Conversions {
 
 		$plugin_public = new Fathom_Analytics_Conversions_Public( $this->get_plugin_name(), $this->get_version() );
 
+		//$this->loader->add_action( 'wp_footer', $plugin_public, 'fac_wp_footer', 52, 0 );
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+        // add hidden field to CF7 form - frontend
+        $this->loader->add_filter( 'wpcf7_form_hidden_fields', $plugin_public, 'fac_cf7_hidden_fields' );
 
 	}
 
