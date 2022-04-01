@@ -6,8 +6,8 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://www.sixfive.com.au
- * @since      1.0.0
+ * @link       https://www.fathomconversions.com
+ * @since      0.5
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
@@ -22,7 +22,7 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
+ * @since      0.5
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
  * @author     Duncan Isaksen-Loxton <duncan@sixfive.com.au>

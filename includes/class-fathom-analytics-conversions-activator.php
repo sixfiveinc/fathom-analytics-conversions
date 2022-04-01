@@ -3,8 +3,8 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://www.sixfive.com.au
- * @since      1.0.0
+ * @link       https://www.fathomconversions.com
+ * @since      0.5
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
@@ -15,7 +15,7 @@
  *
  * This class defines all code necessary to run during the plugin's activation.
  *
- * @since      1.0.0
+ * @since      0.5
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
  * @author     Duncan Isaksen-Loxton <duncan@sixfive.com.au>

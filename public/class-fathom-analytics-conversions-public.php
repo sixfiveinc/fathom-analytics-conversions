@@ -3,8 +3,8 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://www.sixfive.com.au
- * @since      1.0.0
+ * @link       https://www.fathomconversions.com
+ * @since      0.5
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/public
