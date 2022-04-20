@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom, contactform7, wpforms
 Requires at least: 5.9
 Tested up to: 5.9
-Stable tag: 0.5
+Stable tag: 1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -71,11 +71,11 @@ Please create a thread in the Wordpress plugin support pages.
 
 == Changelog ==
 
-= 0.5 =
+= 1.0 =
 * First Version supporting Contact Form 7
 
 
 == Upgrade Notice ==
 
-= 0.5 =
+= 1.0 =
 This is the first version.

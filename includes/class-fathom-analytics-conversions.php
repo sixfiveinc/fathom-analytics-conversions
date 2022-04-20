@@ -7,7 +7,7 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://www.fathomconversions.com
- * @since      0.5
+ * @since      1.0
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
@@ -22,7 +22,7 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      0.5
+ * @since      1.0
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
  * @author     Duncan Isaksen-Loxton <duncan@sixfive.com.au>

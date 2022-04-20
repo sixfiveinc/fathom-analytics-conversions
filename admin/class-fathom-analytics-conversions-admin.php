@@ -4,7 +4,7 @@
  * The admin-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      0.5
+ * @since      1.0
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/admin
@@ -124,10 +124,10 @@ class Fathom_Analytics_Conversions_Admin {
             case FAC4WP_ADMIN_GROUP_API_KEY: {
                 $_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
                 $_input_readonly = '';
-                $_warning_after  = '';
+                //$_warning_after  = '';
 
-                echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" name="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" value="' . $_api_key . '" ' . $_input_readonly . '/><br />' . $args['description'];
-                echo $_warning_after;
+                echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" name="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" value="' . esc_attr($_api_key) . '" ' . $_input_readonly . '/><br />' . $args['description'];
+                //echo $_warning_after;
                 //fac_api_key();
 
                 break;

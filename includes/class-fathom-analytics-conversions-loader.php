@@ -4,7 +4,7 @@
  * Register all actions and filters for the plugin
  *
  * @link       https://www.fathomconversions.com
- * @since      0.5
+ * @since      1.0
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes

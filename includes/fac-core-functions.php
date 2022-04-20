@@ -5,7 +5,7 @@
  * General core functions available on both the front-end and admin.
  *
  * @package Fathom_Analytics_Conversions\Functions
- * @version 0.5
+ * @version 1.0
  */
 
 defined( 'ABSPATH' ) || exit;
