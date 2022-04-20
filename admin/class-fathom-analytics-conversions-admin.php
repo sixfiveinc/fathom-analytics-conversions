@@ -126,7 +126,7 @@ class Fathom_Analytics_Conversions_Admin {
                 $_input_readonly = '';
                 //$_warning_after  = '';
 
-                echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" name="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" value="' . esc_attr($_api_key) . '" ' . $_input_readonly . '/><br />' . $args['description'];
+                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . $_input_readonly . ' class="regular-text" /><br />' . $args['description'];
                 //echo $_warning_after;
                 //fac_api_key();
 
@@ -138,7 +138,7 @@ class Fathom_Analytics_Conversions_Admin {
 
                 switch ( gettype( $opt_val ) ) {
                     case 'boolean': {
-                        echo '<input type="checkbox" id="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" name="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . $args['description'];
+                        echo '<input type="checkbox" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . $args['description'];
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
                             if ( is_plugin_active( $args['plugin_to_check'] ) ) {
@@ -152,7 +152,7 @@ class Fathom_Analytics_Conversions_Admin {
                     }
 
                     default: {
-                        echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" name="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" value="' . esc_attr( $opt_val ) . '" size="80" /><br />' . $args['description'];
+                        echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="' . esc_attr( $opt_val ) . '" size="80" /><br />' . $args['description'];
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
                             if ( is_plugin_active( $args['plugin_to_check'] ) ) {
