@@ -76,6 +76,8 @@ class Fathom_Analytics_Conversions {
 
         define( 'FAC4WP_OPTIONS', 'fac4wp-options' );
         define( 'FAC4WP_OPTION_API_KEY_CODE', 'fac-api-key-code' );
+        define( 'FAC_OPTION_SITE_ID', 'fac-site-id' );
+        define( 'FAC_FATHOM_TRACK_ADMIN', 'fac-fathom-track-admin' );
 
         define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
 
@@ -199,8 +201,6 @@ class Fathom_Analytics_Conversions {
 	private function define_public_hooks() {
 
 		$plugin_public = new Fathom_Analytics_Conversions_Public( $this->get_plugin_name(), $this->get_version() );
-
-		//$this->loader->add_action( 'wp_footer', $plugin_public, 'fac_wp_footer', 52, 0 );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

@@ -15,8 +15,6 @@ global $fac4wp_options, $fac4wp_default_options;
 $fac4wp_options = array();
 
 $fac4wp_default_options = array(
-    'FATHOM_ADMIN_TRACKING_OPTION_NAME'             => fac_fathom_get_admin_tracking(),
-    'fac_fathom_analytics_is_active'                => fac_fathom_analytics_is_active(),
     FAC4WP_OPTION_API_KEY_CODE                      => '',
     FAC4WP_OPTION_INTEGRATE_WPCF7                   => false,
 );
@@ -31,6 +29,14 @@ function fac4wp_reload_options() {
 
     $return_options = array_merge( $fac4wp_default_options, $stored_options );
 
+    // fathom analytics options
+    $fac_fathom_options = array(
+        FAC_FATHOM_TRACK_ADMIN              => fac_fathom_get_admin_tracking(),
+        FAC_OPTION_SITE_ID                  => fac_fathom_get_site_id(),
+        'fac_fathom_analytics_is_active'    => fac_fathom_analytics_is_active(),
+    );
+    $return_options = array_merge( $return_options, $fac_fathom_options );
+
     return $return_options;
 }
 
@@ -41,6 +47,13 @@ function fac_fathom_get_admin_tracking() {
     if(!defined('FATHOM_ADMIN_TRACKING_OPTION_NAME')) define('FATHOM_ADMIN_TRACKING_OPTION_NAME', 'fathom_track_admin');
 
     return get_option(FATHOM_ADMIN_TRACKING_OPTION_NAME, '');
+}
+
+// get Site ID from Fathom Analytics
+function fac_fathom_get_site_id() {
+    if(!defined('FATHOM_SITE_ID_OPTION_NAME')) define('FATHOM_SITE_ID_OPTION_NAME', 'fathom_site_id');
+
+    return get_option(FATHOM_SITE_ID_OPTION_NAME, '');
 }
 
 // is Fathom Analytics active
