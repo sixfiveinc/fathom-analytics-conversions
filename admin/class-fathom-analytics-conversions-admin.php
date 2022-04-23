@@ -367,7 +367,21 @@ class Fathom_Analytics_Conversions_Admin {
                 admin_url('plugin-install.php?tab=plugin-information&plugin=fathom-analytics&from=plugins&TB_iframe=true&width=600&height=550')
             );
             $notice .= '</p></div>';
-            echo $notice;
+            echo wp_kses($notice,
+                [
+                    'div' => [
+                        'class' => true,
+                        'id' => true,
+                    ],
+                    'p' => [],
+                    'a' => array(
+                        'href' => true,
+                        'class' => true,
+                        'title' => true,
+                    ),
+                    'b' => [],
+                ]
+            );
 
         }
         elseif(!is_plugin_active('fathom-analytics/fathom-analytics.php')) {
@@ -378,7 +392,16 @@ class Fathom_Analytics_Conversions_Admin {
                 )
             );
             $notice .= '</p></div>';
-            echo $notice;
+            echo wp_kses($notice,
+                [
+                    'div' => [
+                        'class' => true,
+                        'id' => true,
+                    ],
+                    'p' => [],
+                    'b' => [],
+                ]
+            );
         }
     }
 
@@ -437,7 +460,7 @@ class Fathom_Analytics_Conversions_Admin {
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
-            $fac_cf7_val = $_POST['fac_cf7'];
+            $fac_cf7_val = sanitize_text_field($_POST['fac_cf7']);
 
             update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
         }

@@ -73,9 +73,7 @@ function fac_api_key() {
         'headers' => $wp_request_headers,
     ];
     $response = wp_remote_get( $url, $request_args );
-    //echo '<pre>';print_r($response);echo '</pre>';
     if ( ! is_wp_error( $response ) ) {
         $result = wp_remote_retrieve_body( $response );
     } else $result = '';
-    echo '<pre>';print_r($result);echo '</pre>';
 }
