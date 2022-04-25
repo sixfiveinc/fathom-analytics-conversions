@@ -58,6 +58,9 @@ function fac_fathom_get_site_id() {
 
 // is Fathom Analytics active
 function fac_fathom_analytics_is_active() {
+    if (!function_exists('is_plugin_active')) {
+        include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+    }
     return is_plugin_active('fathom-analytics/fathom-analytics.php');
 }
 
