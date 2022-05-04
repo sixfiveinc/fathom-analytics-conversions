@@ -3,8 +3,13 @@
  * included in this file.
  */
 
-.facid_validation_error {
+.fac_error {
     color: #c00;
     font-weight: bold;
-    display: none;
+}
+.fac4wp-plugin-not-active {
+    color: #c00;
+}
+.fac4wp-plugin-active {
+    color: #008000;
 }

@@ -107,7 +107,7 @@ class Fathom_Analytics_Conversions_Admin {
         switch ( $args['id'] ) {
 
             case FAC4WP_ADMIN_GROUP_INTEGRATION: {
-                //_e( 'Fathom Analytics Conversions can integrate with several popular plugins. Please check the plugins you would like to integrate with:', $this->plugin_name );
+                //_e( 'Fathom Analytics Conversions can integrate with several popular plugins. Please check the plugins you would like to integrate with:', 'fathom-analytics-conversions' );
 
                 break;
             }
@@ -124,11 +124,64 @@ class Fathom_Analytics_Conversions_Admin {
             case FAC4WP_ADMIN_GROUP_API_KEY: {
                 $_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
                 $_input_readonly = '';
+                //$_warning_after  = '';
+
+                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />';
+                echo wp_kses($args['description'],
+                    array(
+                        'a' => array(
+                            'href' => true,
+                        ),
+                    ));
+                //echo $_warning_after;
+                //if(get_current_user_id() === 2) {
+                    $result = fac_api_key();
+                    //echo '<pre>';print_r($result);echo '</pre>';
+                    if(isset($events['error']) && !empty($result['error'])) {
+                        echo '<p class="fac_error">'.esc_html($result['error']).'</p>';
+                    }
+                    else {
+                        /*$events = fac_get_fathom_events();
+                        //echo '<pre>';print_r($events);echo '</pre>';
+                        if(isset($events['error']) && empty($events['error'])) {
+                            $event_body = $events['body'];
+                            if(fac_is_json($event_body)) {
+                                $event_body = json_decode($event_body);
+                            }
+                            echo '<pre>';print_r($event_body);echo '</pre>';
+                        }*/
+                        // check cf7 forms
+                        fac_check_cf7_forms();
+                        fac_check_wpforms_forms();
+                    }
+                //}
+
+                break;
+            }
+
+            case FAC4WP_ADMIN_GROUP_SITE_ID: {
+                $_site_id   = $fac4wp_options[ FAC_OPTION_SITE_ID ];
+                $_input_readonly = ' readonly="readonly"';
                 $_warning_after  = '';
 
-                echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" name="' . FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']" value="' . $_api_key . '" ' . $_input_readonly . '/><br />' . $args['description'];
-                echo $_warning_after;
-                //fac_api_key();
+                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" value="' . esc_attr($_site_id) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />' . esc_html($args['description']);
+                if(empty($_site_id)) {
+                    echo '<p class="fac_error">'.
+                        sprintf(
+                            wp_kses(
+                                __('Please enter site ID on <a href="%s" target="_blank" rel="noopener">Fathom Analytics settings page</a>.', 'fathom-analytics-conversions'),
+                                array(
+                                    'a' => array(
+                                        'href' => true,
+                                        'target' => true,
+                                        'rel' => true,
+                                    ),
+                                )
+                            ),
+                            '?page=fathom-analytics'
+                        )
+                        .'</p>';
+                }
 
                 break;
             }
@@ -138,13 +191,32 @@ class Fathom_Analytics_Conversions_Admin {
 
                 switch ( gettype( $opt_val ) ) {
                     case 'boolean': {
-                        echo '<input type="checkbox" id="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" name="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . $args['description'];
+                        echo '<input type="checkbox" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . esc_html($args['description']);
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
                             if ( is_plugin_active( $args['plugin_to_check'] ) ) {
-                                echo '<br />' . __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', $this->plugin_name );
+                                echo '<br />';
+                                echo wp_kses(
+                                    __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', 'fathom-analytics-conversions' ),
+                                    [
+                                        'strong' => [
+                                            'class' => true,
+                                        ],
+                                    ]
+                                );
                             } else {
-                                echo '<br />' . __( 'This plugin (' . $args['plugin_to_check'] . ') is <strong class="fac4wp-plugin-not-active">not active</strong>, enabling this integration could cause issues on frontend!', $this->plugin_name );
+                                echo '<br />';
+                                echo sprintf(
+                                    wp_kses(
+                                        __( 'This plugin (%s) is <strong class="fac4wp-plugin-not-active">not active</strong>, enabling this integration could cause issues on frontend!', 'fathom-analytics-conversions' ),
+                                        [
+                                            'strong' => [
+                                                'class' => true,
+                                            ],
+                                        ]
+                                    ),
+                                    $args['plugin_to_check']
+                                );
                             }
                         }
 
@@ -152,13 +224,29 @@ class Fathom_Analytics_Conversions_Admin {
                     }
 
                     default: {
-                        echo '<input type="text" id="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" name="' . FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']" value="' . esc_attr( $opt_val ) . '" size="80" /><br />' . $args['description'];
+                        echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="' . esc_attr( $opt_val ) . '" size="80" /><br />' . esc_html($args['description']);
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
                             if ( is_plugin_active( $args['plugin_to_check'] ) ) {
-                                echo '<br />' . __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', $this->plugin_name );
+                                echo '<br />';
+                                echo wp_kses(
+                                    __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', 'fathom-analytics-conversions' ),
+                                    [
+                                         'strong' => [
+                                              'class' => true,
+                                         ],
+                                    ]
+                                );
                             } else {
-                                echo '<br />' . __( 'This plugin is <strong class="fac4wp-plugin-not-active">not active</strong>, enabling this integration could cause issues on frontend!', $this->plugin_name );
+                                echo '<br />';
+                                echo wp_kses(
+                                    __( 'This plugin is <strong class="fac4wp-plugin-not-active">not active</strong>, enabling this integration could cause issues on frontend!', 'fathom-analytics-conversions' ),
+                                    [
+                                        'strong' => [
+                                            'class' => true,
+                                        ],
+                                    ]
+                                );
                             }
                         }
                     }
@@ -177,9 +265,10 @@ class Fathom_Analytics_Conversions_Admin {
                 $newoptionvalue = '';
             }
 
-            // "include" settings
-            if ( substr( $optionname, 0, 8 ) == 'include-' ) {
-
+            // site ID
+            if ( $optionname === FAC_OPTION_SITE_ID ) {
+                //$output[ $optionname ] = '';
+                unset($output[ $optionname ]);
             // integrations
             } elseif ( substr( $optionname, 0, 10 ) == 'integrate-' ) {
                 $output[ $optionname ] = (bool) $newoptionvalue;
@@ -214,10 +303,16 @@ class Fathom_Analytics_Conversions_Admin {
     public function fac4wp_admin_init() {
         $GLOBALS['fac4wp_integrate_field_texts'] = array(
             FAC4WP_OPTION_INTEGRATE_WPCF7                 => array(
-                'label'         => __( 'Contact Form 7', $this->plugin_name ),
-                'description'   => __( 'Check this to add conversation a successful form submission.', $this->plugin_name ),
+                'label'         => __( 'Contact Form 7', 'fathom-analytics-conversions' ),
+                'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
                 'phase'         => FAC4WP_PHASE_STABLE,
                 'plugin_to_check' => 'contact-form-7/wp-contact-form-7.php',
+            ),
+            FAC4WP_OPTION_INTEGRATE_WPFORMS                 => array(
+                'label'         => __( 'WPForms', 'fathom-analytics-conversions' ),
+                'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+                'phase'         => FAC4WP_PHASE_STABLE,
+                'plugin_to_check' => 'wpforms/wpforms.php',
             ),
         );
         global $fac4wp_integrate_field_texts;
@@ -227,28 +322,40 @@ class Fathom_Analytics_Conversions_Admin {
             ]
         );
 
-        /*add_settings_section(
+        add_settings_section(
             FAC4WP_ADMIN_GROUP_GENERAL,
-            __( 'General', $this->plugin_name ),
+            __( 'General', 'fathom-analytics-conversions' ),
             'fac4wp_admin_output_section',
             FAC4WP_ADMINSLUG
         );
 
         add_settings_field(
             FAC4WP_ADMIN_GROUP_API_KEY,
-            __( 'API Key', $this->plugin_name ),
+            __( 'API Key', 'fathom-analytics-conversions' ),
             [$this, 'fac4wp_admin_output_field'],
             FAC4WP_ADMINSLUG,
             FAC4WP_ADMIN_GROUP_GENERAL,
             array(
                 'label_for'   => FAC4WP_ADMIN_GROUP_API_KEY,
-                'description' => __( 'Enter your Fathom API key here.', $this->plugin_name ) . ' Get API key <a href="https://app.usefathom.com/#/settings/api" target="_blank">here</a>.',
+                'description' => __( 'Enter your Fathom API key here.', 'fathom-analytics-conversions' ) . ' Get API key <a href="https://app.usefathom.com/#/settings/api" target="_blank">here</a>.',
             )
-        );*/
+        );
+
+        add_settings_field(
+            FAC4WP_ADMIN_GROUP_SITE_ID,
+            __( 'Site ID', 'fathom-analytics-conversions' ),
+            [$this, 'fac4wp_admin_output_field'],
+            FAC4WP_ADMINSLUG,
+            FAC4WP_ADMIN_GROUP_GENERAL,
+            array(
+                'label_for'   => FAC4WP_ADMIN_GROUP_SITE_ID,
+                'description' => __( 'Site ID from Fathom Analytics.', 'fathom-analytics-conversions' ),
+            )
+        );
 
         add_settings_section(
             FAC4WP_ADMIN_GROUP_INTEGRATION,
-            __( 'Integration', $this->plugin_name ),
+            __( 'Integration', 'fathom-analytics-conversions' ),
             [$this, 'fac4wp_admin_output_section'],
             FAC4WP_ADMINSLUG
         );
@@ -279,8 +386,8 @@ class Fathom_Analytics_Conversions_Admin {
      */
     public function fac_admin_menu() {
         add_options_page(
-            __( 'Fathom Analytics Conversions settings', $this->plugin_name ),
-            __( 'Fathom Analytics Conversions', $this->plugin_name ),
+            __( 'Fathom Analytics Conversions settings', 'fathom-analytics-conversions' ),
+            __( 'Fathom Analytics Conversions', 'fathom-analytics-conversions' ),
             'manage_options',
             FAC4WP_ADMINSLUG,
             [$this, 'fac4wp_show_admin_page'],
@@ -295,7 +402,7 @@ class Fathom_Analytics_Conversions_Admin {
         ?>
         <div class="wrap">
             <div id="fac4wp-icon" class="icon32" style="background-image: url(<?php //echo $gtp4wp_plugin_url; ?>admin/images/tag_manager-32.png);"><br /></div>
-            <h2><?php _e( 'Fathom Analytics Conversions options', $this->plugin_name ); ?></h2>
+            <h2><?php _e( 'Fathom Analytics Conversions options', 'fathom-analytics-conversions' ); ?></h2>
             <form action="options.php" method="post">
                 <?php settings_fields( FAC4WP_ADMIN_GROUP ); ?>
                 <?php do_settings_sections( FAC4WP_ADMINSLUG ); ?>
@@ -310,27 +417,71 @@ class Fathom_Analytics_Conversions_Admin {
         if( !file_exists(WP_PLUGIN_DIR.'/fathom-analytics/fathom-analytics.php') ) {
 
             $notice = '<div class="error" id="messages"><p>';
-            $notice .= __('Fathom Analytics plugin must be installed for the <b>Fathom Analytics Conversions</b> to work. <b><a href="'.admin_url('plugin-install.php?tab=plugin-information&plugin=fathom-analytics&from=plugins&TB_iframe=true&width=600&height=550').'" class="thickbox" title="Fathom Analytics">Install Fathom Analytics Now.</a></b>', $this->plugin_name);
+            $notice .= sprintf(
+                wp_kses(
+                __('<b>Fathom Analytics</b> plugin must be installed for the <b>Fathom Analytics Conversions</b> to work. <b><a href="%s" class="thickbox" title="Fathom Analytics">Install Fathom Analytics Now.</a></b>', 'fathom-analytics-conversions'),
+                    array(
+                        'a' => array(
+                            'href' => true,
+                            'class' => true,
+                            'title' => true,
+                        ),
+                        'b' => [],
+                    )
+                ),
+                admin_url('plugin-install.php?tab=plugin-information&plugin=fathom-analytics&from=plugins&TB_iframe=true&width=600&height=550')
+            );
             $notice .= '</p></div>';
-            echo $notice;
+            echo wp_kses($notice,
+                [
+                    'div' => [
+                        'class' => true,
+                        'id' => true,
+                    ],
+                    'p' => [],
+                    'a' => array(
+                        'href' => true,
+                        'class' => true,
+                        'title' => true,
+                    ),
+                    'b' => [],
+                ]
+            );
 
         }
         elseif(!is_plugin_active('fathom-analytics/fathom-analytics.php')) {
             $notice = '<div class="error" id="messages"><p>';
-            $notice .= __('<b>Please activate Fathom Analytics</b> below for the <b>Fathom Analytics Conversions</b> to work.', $this->plugin_name);
+            $notice .= wp_kses(__('<b>Please activate Fathom Analytics</b> below for the <b>Fathom Analytics Conversions</b> to work.', 'fathom-analytics-conversions'),
+                array(
+                    'b' => [],
+                )
+            );
             $notice .= '</p></div>';
-            echo $notice;
+            echo wp_kses($notice,
+                [
+                    'div' => [
+                        'class' => true,
+                        'id' => true,
+                    ],
+                    'p' => [],
+                    'b' => [],
+                ]
+            );
         }
     }
 
     // add meta box to CF7 form admin
     function fac_cf7_meta_box($panels) {
+        global $fac4wp_options;
+        $new_page = [];
+        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] ) {
         $new_page = array(
             'fac-cf7' => array(
-                'title' => __( 'Fathom Analytics', $this->plugin_name ),
+                'title' => __( 'Fathom Analytics', 'fathom-analytics-conversions' ),
                 'callback' => [$this, 'fac_cf7_box']
             )
         );
+        }
 
         return array_merge($panels, $new_page);
     }
@@ -348,14 +499,14 @@ class Fathom_Analytics_Conversions_Admin {
                 <tr>
                     <th scope="row">
                         <label for="fac_cf7_event_id">
-                            <?php echo __('Event ID', $this->plugin_name); ?>
+                            <?php echo esc_html__('Event ID', 'fathom-analytics-conversions'); ?>
                         </label>
                     </th>
                     <td>
                         <input type="text" id="fac_cf7_event_id" name="fac_cf7[event_id]" class="" value="<?php echo esc_attr($fac_cf7_event_id);?>">
                         <p>
                             <a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">
-                            <?php echo __('Creating Events with Fathom', $this->plugin_name);?>
+                            <?php echo esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions');?>
                             </a>
                         </p>
                     </td>
@@ -374,9 +525,64 @@ class Fathom_Analytics_Conversions_Admin {
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
-            $fac_cf7_val = $_POST['fac_cf7'];
+            $fac_cf7_val = sanitize_text_field($_POST['fac_cf7']);
 
             update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
+        }
+    }
+
+    // check to add event id to new cf7 form
+    public function fac_wp_insert_post($post_ID, $post) {
+        // check if is a cf7 form
+        if(isset($post->post_type) && $post->post_type === 'wpcf7_contact_form') {
+            $fac_cf7 = get_option( 'fac_cf7_'.$post_ID, [] );
+            $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
+            if(empty($fac_cf7_event_id)) {
+                fa_add_event_id_to_cf7($post_ID, $post->post_title);
+            }
+        }
+    }
+
+    // add settings section to WPForms form admin
+    function fac_wpforms_builder_settings_sections($sections) {
+        global $fac4wp_options;
+        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
+            $sections['fac-wpforms'] = __( 'Fathom Analytics', 'fathom-analytics-conversions' );
+        }
+
+        return $sections;
+    }
+
+    // WPForms custom panel
+    function fac_wpforms_form_settings_panel_content($settings) {
+        global $fac4wp_options;
+        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
+            echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-fac-wpforms">';
+            echo '<div class="wpforms-panel-content-section-title">';
+            esc_html_e('Fathom Analytics', 'fathom-analytics-conversions');
+            echo '</div>';
+            if (function_exists('wpforms_panel_field')) {
+                wpforms_panel_field(
+                    'text',
+                    'settings',
+                    'fac_wpforms_event_id',
+                    $settings->form_data,
+                    esc_html__('Event ID', 'fathom-analytics-conversions'),
+                    array(
+                        /*'input_id'    => 'wpforms-panel-field-confirmations-redirect-' . $id,
+                        'input_class' => 'wpforms-panel-field-confirmations-redirect',
+                        'parent'      => 'settings',
+                        'subsection'  => $id,*/
+                        'after' => '<p class="note"><a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">'.
+                            esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions')
+                            . '</a>' . '</p>',
+                    )
+                );
+            }
+
+            do_action('wpforms_form_settings_fac-wpforms', $this);
+
+            echo '</div>';
         }
     }
 
