@@ -107,7 +107,7 @@ class Fathom_Analytics_Conversions_Public {
 		}
 
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
-			if ( !( empty( $fac4wp_options[FAC_FATHOM_TRACK_ADMIN] ) && current_user_can('manage_options') ) ) { // track visits by administrators!
+			if ( !( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPFORMS, true );
 				wp_enqueue_script( 'fac-wpforms-tracker', $fac4wp_plugin_url . 'public/js/fac-wpforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
@@ -116,8 +116,8 @@ class Fathom_Analytics_Conversions_Public {
 	}
 
 	// add event id to hidden form field
-	public function fac_cf7_hidden_fields($hidden_fields) {
-		if(function_exists('wpcf7_get_current_contact_form')) {
+	public function fac_cf7_hidden_fields( $hidden_fields ) {
+		if ( function_exists( 'wpcf7_get_current_contact_form' ) ) {
 			$form = wpcf7_get_current_contact_form();
 			$form_id = $form->id();
 			$fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
