@@ -115,29 +115,29 @@ class Fathom_Analytics_Conversions_Public {
 		}
 	}
 
-    /**
-     * Add event id to hidden form field
-     *
-     * @since    1.0
-     * @param   array $hidden_fields  Array of hidden fields
-     */
+	/**
+	 * Add event id to hidden form field
+	 *
+	 * @since    1.0
+	 * @param   array $hidden_fields  Array of hidden fields
+	 */
 	public function fac_cf7_hidden_fields( $hidden_fields ) {
 		if ( function_exists( 'wpcf7_get_current_contact_form' ) ) {
 			$form = wpcf7_get_current_contact_form();
 			$form_id = $form->id();
-			$fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
+			$fac_cf7 = get_option( 'fac_cf7_' . $form_id, [] );
 			$fac_cf7_event_id = isset( $fac_cf7['event_id'] ) ? $fac_cf7['event_id'] : '';
 			$hidden_fields['fac_cf7_event_id'] = $fac_cf7_event_id;
 		}
 		return $hidden_fields;
 	}
 
-    /**
-     * Add event id to hidden form field
-     *
-     * @since    1.0
-     * @param   array $form_data    Array of form data
-     */
+	/**
+	 * Add event id to hidden form field
+	 *
+	 * @since    1.0
+	 * @param   array $form_data    Array of form data
+	 */
 	public function fac_wpforms_display_submit_before( $form_data ) {
 		global $fac4wp_options;
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
