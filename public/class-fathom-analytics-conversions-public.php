@@ -119,13 +119,13 @@ class Fathom_Analytics_Conversions_Public {
 	 * Add event id to hidden form field
 	 *
 	 * @since    1.0
-	 * @param   array $hidden_fields  Array of hidden fields
+	 * @param   array $hidden_fields  Array of hidden fields.
 	 */
 	public function fac_cf7_hidden_fields( $hidden_fields ) {
 		if ( function_exists( 'wpcf7_get_current_contact_form' ) ) {
 			$form = wpcf7_get_current_contact_form();
 			$form_id = $form->id();
-			$fac_cf7 = get_option( 'fac_cf7_' . $form_id, [] );
+			$fac_cf7 = get_option( 'fac_cf7_' . $form_id, array() );
 			$fac_cf7_event_id = isset( $fac_cf7['event_id'] ) ? $fac_cf7['event_id'] : '';
 			$hidden_fields['fac_cf7_event_id'] = $fac_cf7_event_id;
 		}
@@ -136,14 +136,14 @@ class Fathom_Analytics_Conversions_Public {
 	 * Add event id to hidden form field
 	 *
 	 * @since    1.0
-	 * @param   array $form_data    Array of form data
+	 * @param   array $form_data    Array of form data.
 	 */
 	public function fac_wpforms_display_submit_before( $form_data ) {
 		global $fac4wp_options;
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
 			$settings = $form_data['settings'];
 			$fac_wpforms_event_id = isset( $settings['fac_wpforms_event_id'] ) ? $settings['fac_wpforms_event_id'] : '';
-			//echo '<pre>';print_r($settings);echo '</pre>';
+			// echo '<pre>';print_r($settings);echo '</pre>';
 			echo '<input type="hidden" name="wpforms[fac_event_id]" value="' . esc_attr( $fac_wpforms_event_id ) . '">';
 		}
 	}
