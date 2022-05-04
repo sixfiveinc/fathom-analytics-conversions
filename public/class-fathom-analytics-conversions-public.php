@@ -82,7 +82,7 @@ class Fathom_Analytics_Conversions_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-        global $fac4wp_options, $fac4wp_plugin_url;
+global $fac4wp_options, $fac4wp_plugin_url;
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -98,15 +98,15 @@ class Fathom_Analytics_Conversions_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-public.js', array( 'jquery' ), $this->version, false );
 
-        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
-            if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
+if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
+if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
-                $in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPCF7, true );
-                wp_enqueue_script( 'fac-contact-form-7-tracker', $fac4wp_plugin_url . 'public/js/fac-contact-form-7-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
-            }
-        }
+$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPCF7, true );
+wp_enqueue_script( 'fac-contact-form-7-tracker', $fac4wp_plugin_url . 'public/js/fac-contact-form-7-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
+}
+}
 
-        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
+if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
             if(!(empty($fac4wp_options[FAC_FATHOM_TRACK_ADMIN] ) && current_user_can('manage_options'))) { // track visits by administrators
 
                 $in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPFORMS, true );
