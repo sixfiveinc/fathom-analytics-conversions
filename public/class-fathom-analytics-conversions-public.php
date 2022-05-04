@@ -143,7 +143,6 @@ class Fathom_Analytics_Conversions_Public {
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
 			$settings = $form_data['settings'];
 			$fac_wpforms_event_id = isset( $settings['fac_wpforms_event_id'] ) ? $settings['fac_wpforms_event_id'] : '';
-			// echo '<pre>';print_r($settings);echo '</pre>';
 			echo '<input type="hidden" name="wpforms[fac_event_id]" value="' . esc_attr( $fac_wpforms_event_id ) . '">';
 		}
 	}
