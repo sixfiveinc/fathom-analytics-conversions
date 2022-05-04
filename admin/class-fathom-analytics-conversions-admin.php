@@ -397,7 +397,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
 
-    function fac4wp_show_admin_page() {
+    public function fac4wp_show_admin_page() {
         //global $gtp4wp_plugin_url;
         ?>
         <div class="wrap">
@@ -413,7 +413,7 @@ class Fathom_Analytics_Conversions_Admin {
         <?php
     }
 
-    function fac_admin_notices() {
+    public function fac_admin_notices() {
         if( !file_exists(WP_PLUGIN_DIR.'/fathom-analytics/fathom-analytics.php') ) {
 
             $notice = '<div class="error" id="messages"><p>';
@@ -471,7 +471,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
     // add meta box to CF7 form admin
-    function fac_cf7_meta_box($panels) {
+    public function fac_cf7_meta_box($panels) {
         global $fac4wp_options;
         $new_page = [];
         if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] ) {
@@ -525,26 +525,68 @@ class Fathom_Analytics_Conversions_Admin {
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
-            $fac_cf7_val = sanitize_text_field($_POST['fac_cf7']);
+            $fac_cf7_val = fac_array_map_recursive( 'esc_attr', $_POST['fac_cf7'] );
 
             update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
         }
     }
 
-    // check to add event id to new cf7 form
-    public function fac_wp_insert_post($post_ID, $post) {
-        // check if is a cf7 form
-        if(isset($post->post_type) && $post->post_type === 'wpcf7_contact_form') {
-            $fac_cf7 = get_option( 'fac_cf7_'.$post_ID, [] );
-            $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
-            if(empty($fac_cf7_event_id)) {
-                fa_add_event_id_to_cf7($post_ID, $post->post_title);
+    // check to add/update event id to new cf7 form
+    public function fac_wpcf7_after_save($args) {
+        $form_id = $args->id;
+        $title = wp_slash( $args->title );
+
+        $fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
+        $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
+        if(empty($fac_cf7_event_id)) {
+            fa_add_event_id_to_cf7($form_id, $title);
+        }
+        else {
+            // check if event id exist
+            $event = fac_get_fathom_event($fac_cf7_event_id);
+            if( $event['code'] !== 200 ) {
+                fa_add_event_id_to_cf7($form_id, $title);
+            }
+            else fac_update_fathom_event($fac_cf7_event_id, $title);
+        }
+
+    }
+
+    // check to add event id to new WPForms form
+    public function fac_wp_insert_post_wpforms($post_ID, $post) {
+        // check if is a WPForms form
+        if(isset($post->post_type) && $post->post_type === 'wpforms') {
+            // get form content
+            $form_content = $post->post_content;
+
+            // get form data
+            if ( ! $form_content || empty( $form_content ) ) {
+                $form_data = false;
+            }
+            else $form_data =  wp_unslash( json_decode( $form_content, true ) );
+
+            // get form setting
+            $form_settings = $form_data['settings'];
+            $wpforms_event_id = isset($form_settings['fac_wpforms_event_id']) ? $form_settings['fac_wpforms_event_id'] : '';
+            $title = $post->post_title;
+
+            // add/update event id
+            if(empty($wpforms_event_id)) {
+                fa_add_event_id_to_wpforms($post_ID, $title);
+            }
+            else {
+                // check if event id exist
+                $event = fac_get_fathom_event($wpforms_event_id);
+                if( $event['code'] !== 200 ) {
+                    fa_add_event_id_to_wpforms($post_ID, $title);
+                }
+                else fac_update_fathom_event($wpforms_event_id, $title);
             }
         }
     }
 
     // add settings section to WPForms form admin
-    function fac_wpforms_builder_settings_sections($sections) {
+    public function fac_wpforms_builder_settings_sections($sections) {
         global $fac4wp_options;
         if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
             $sections['fac-wpforms'] = __( 'Fathom Analytics', 'fathom-analytics-conversions' );
@@ -554,7 +596,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
     // WPForms custom panel
-    function fac_wpforms_form_settings_panel_content($settings) {
+    public function fac_wpforms_form_settings_panel_content($settings) {
         global $fac4wp_options;
         if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
             echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-fac-wpforms">';

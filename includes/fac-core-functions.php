@@ -75,6 +75,17 @@ function fac_api_key() {
     return $result;
 }
 
+// array_map recursive
+if(!function_exists('fac_array_map_recursive')) {
+    function fac_array_map_recursive($callback, $array) {
+        $func = function ($item) use (&$func, &$callback) {
+            return is_array($item) ? array_map($func, $item) : call_user_func($callback, $item);
+        };
+
+        return array_map($func, $array);
+    }
+}
+
 // get Fathom events
 function fac_get_fathom_events() {
     global $fac4wp_options;
@@ -83,6 +94,19 @@ function fac_get_fathom_events() {
     $url = 'https://api.usefathom.com/v1/sites/'.$_site_id.'/events';
     $result = fac_fathom_api($url);
     return $result;
+}
+
+// get new Fathom event
+function fac_get_fathom_event($id) {
+    global $fac4wp_options;
+    $_site_id   = $fac4wp_options[ FAC_OPTION_SITE_ID ];
+    $return = [];
+    if(empty($_site_id)) return [];
+    $url = 'https://api.usefathom.com/v1/sites/'.$_site_id.'/events/'.$id;
+    $method = 'POST';
+    //$body = ['id' => $id];
+    $return = fac_fathom_api($url);
+    return $return;
 }
 
 // create new Fathom event

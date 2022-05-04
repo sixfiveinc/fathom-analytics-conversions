@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 var fieldName = wpFormElements[i].name,
                     fieldValue = wpFormElements[i].value;
                 if(fieldName === 'wpforms[fac_event_id]' && fieldValue) {
+                    //console.log(fieldValue);
                     fathom.trackGoal(fieldValue, 0);
                 }
             }

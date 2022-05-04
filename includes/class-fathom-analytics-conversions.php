@@ -190,12 +190,17 @@ class Fathom_Analytics_Conversions {
         $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_admin, 'fac_cf7_meta_box' );
         // save FAC CF7 options
         $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_cf7_save_options' );
-        // check to add event id to new cf7 form
-        //$this->loader->add_action( 'wp_insert_post', $plugin_admin, 'fac_wp_insert_post', 10, 2 );
+
+        // check to add/update event id to new cf7 form
+        $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_wpcf7_after_save', 20 );
+
         // add settings section to WPForms form admin
         $this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_admin, 'fac_wpforms_builder_settings_sections', 8 );
         // FAC custom panel
         $this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_admin, 'fac_wpforms_form_settings_panel_content' );
+
+        // check to add event id to new WPForms form
+        $this->loader->add_action( 'wp_insert_post', $plugin_admin, 'fac_wp_insert_post_wpforms', 10, 3 );
 
 	}
 
