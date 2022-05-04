@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
  *
@@ -19,8 +18,8 @@
  * For more information, see the following discussion:
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
- * @link       https://www.sixfive.com.au
- * @since      1.0.0
+ * @link              https://www.fathomconversions.com
+ * @since      1.0
  *
  * @package    Fathom_Analytics_Conversions
  */

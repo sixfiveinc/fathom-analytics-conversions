@@ -6,8 +6,8 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://www.sixfive.com.au
- * @since      1.0.0
+ * @link       https://www.fathomconversions.com
+ * @since      1.0
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
@@ -19,7 +19,7 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @since      1.0.0
+ * @since      1.0
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
  * @author     Duncan Isaksen-Loxton <duncan@sixfive.com.au>

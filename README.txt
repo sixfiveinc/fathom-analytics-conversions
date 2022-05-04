@@ -1,9 +1,5 @@
-# Fathom Analytics Conversions
-
-[![GitHub issues](https://img.shields.io/github/issues/65/fathom-analytics-conversions)](https://github.com/65/fathom-analytics-conversions/issues) 
-
 === Fathom Analytics Conversions ===
-Contributors: dloxton, khanhvo, fathomconversions
+Contributors: dloxton, khanhvo
 Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom, contactform7, wpforms
 Requires at least: 5.9
