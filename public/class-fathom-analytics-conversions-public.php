@@ -115,8 +115,11 @@ class Fathom_Analytics_Conversions_Public {
 		}
 	}
 
-	/**
-     * add event id to hidden form field
+    /**
+     * Add event id to hidden form field
+     *
+     * @since    1.0
+     * @param   array $hidden_fields  Array of hidden fields
      */
 	public function fac_cf7_hidden_fields( $hidden_fields ) {
 		if ( function_exists( 'wpcf7_get_current_contact_form' ) ) {
@@ -130,7 +133,10 @@ class Fathom_Analytics_Conversions_Public {
 	}
 
     /**
-     * add event id to hidden form field
+     * Add event id to hidden form field
+     *
+     * @since    1.0
+     * @param   array $form_data    Array of form data
      */
 	public function fac_wpforms_display_submit_before( $form_data ) {
 		global $fac4wp_options;
