@@ -116,77 +116,81 @@ class Fathom_Analytics_Conversions_Admin {
         echo '</span>';
     }
 
-    // admin output field
-    public function fac4wp_admin_output_field($args) {
-        global $fac4wp_options;
+	// admin output field
+	public function fac4wp_admin_output_field($args) {
+		global $fac4wp_options;
+		$_site_id   = $fac4wp_options[ FAC_OPTION_SITE_ID ];
 
-        switch ( $args['label_for'] ) {
-            case FAC4WP_ADMIN_GROUP_API_KEY: {
-                $_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
-                $_input_readonly = '';
-                //$_warning_after  = '';
+		switch ( $args['label_for'] ) {
+			case FAC4WP_ADMIN_GROUP_API_KEY: {
+				$_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
+				$_input_readonly = '';
 
-                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />';
-                echo wp_kses($args['description'],
-                    array(
-                        'a' => array(
-                            'href' => true,
-                        ),
-                    ));
-                //echo $_warning_after;
-                //if(get_current_user_id() === 2) {
-                    $result = fac_api_key();
-                    //echo '<pre>';print_r($result);echo '</pre>';
-                    if(isset($events['error']) && !empty($result['error'])) {
-                        echo '<p class="fac_error">'.esc_html($result['error']).'</p>';
-                    }
-                    else {
-                        /*$events = fac_get_fathom_events();
-                        //echo '<pre>';print_r($events);echo '</pre>';
-                        if(isset($events['error']) && empty($events['error'])) {
-                            $event_body = $events['body'];
-                            if(fac_is_json($event_body)) {
-                                $event_body = json_decode($event_body);
-                            }
-                            echo '<pre>';print_r($event_body);echo '</pre>';
-                        }*/
-                        // check cf7 forms
-                        fac_check_cf7_forms();
-                        fac_check_wpforms_forms();
-                    }
-                //}
+				echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . esc_html($_input_readonly) . ' class="regular-text" />';
+				$result = fac_api_key();
+				//echo '<pre>';print_r($result);echo '</pre>';
+				if ( isset( $result['code'] ) && $result['code'] === 200 ) {
+					$body = isset( $result['body'] ) ? json_decode( $result['body'], true ) : array();
+					//echo '<pre>';print_r($body);echo '</pre>';
+					$r_site_id = isset( $body['id'] ) ? $body['id'] : '';
+					$r_site_name = isset( $body['name'] ) ? $body['name'] : '';
+					$site_name = get_site_url();
+					$site_name = preg_replace('#^https?://#i', '', $site_name);
+					if( $_site_id !== $r_site_id || $r_site_name !== $site_name ) $result['error'] = 'ERROR: The API Key you have entered does not have access to this site.';
+					else {
+						echo '<span class="fac_connected">';
+						echo esc_html( __( 'Connected', 'fathom-analytics-conversions' ) );
+						echo '</span>';
+					}
+				}
+				echo '<br>';
+				echo wp_kses($args['description'],
+					array(
+						'a' => array(
+							'href' => true,
+						),
+					));
 
-                break;
-            }
+				//if(get_current_user_id() === 2) {
+				if( isset( $result['error'] ) && ! empty( $result['error'] ) ) {
+					echo '<p class="fac_error">' . esc_html( $result['error'] ) . '</p>';
+				}
+				else {
+					// check cf7 forms.
+					fac_check_cf7_forms();
+					fac_check_wpforms_forms();
+				}
+				//}
 
-            case FAC4WP_ADMIN_GROUP_SITE_ID: {
-                $_site_id   = $fac4wp_options[ FAC_OPTION_SITE_ID ];
-                $_input_readonly = ' readonly="readonly"';
-                $_warning_after  = '';
+				break;
+			}
 
-                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" value="' . esc_attr($_site_id) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />' . esc_html($args['description']);
-                if(empty($_site_id)) {
-                    echo '<p class="fac_error">'.
-                        sprintf(
-                            wp_kses(
-                                __('Please enter site ID on <a href="%s" target="_blank" rel="noopener">Fathom Analytics settings page</a>.', 'fathom-analytics-conversions'),
-                                array(
-                                    'a' => array(
-                                        'href' => true,
-                                        'target' => true,
-                                        'rel' => true,
-                                    ),
-                                )
-                            ),
-                            '?page=fathom-analytics'
-                        )
-                        .'</p>';
-                }
+			case FAC4WP_ADMIN_GROUP_SITE_ID: {
+				$_input_readonly = ' readonly="readonly"';
 
-                break;
-            }
+				echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" value="' . esc_attr($_site_id) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />' . esc_html($args['description']);
+				if(empty($_site_id)) {
+					echo '<p class="fac_error">'.
+						sprintf(
+							wp_kses(
+								__('Please enter site ID on <a href="%s" target="_blank" rel="noopener">Fathom Analytics settings page</a>.', 'fathom-analytics-conversions'),
+								array(
+									'a' => array(
+										'href' => true,
+										'target' => true,
+										'rel' => true,
+									),
+								)
+							),
+							'?page=fathom-analytics'
+						)
+						.'</p>';
+				}
 
-            default: {
+				break;
+			}
+
+			default: {
                 $opt_val = $fac4wp_options[ $args['option_field_id'] ];
 
                 switch ( gettype( $opt_val ) ) {

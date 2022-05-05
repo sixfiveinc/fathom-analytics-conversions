@@ -165,7 +165,7 @@ function fac_fathom_api($url='') {
         }
         else {
             if(strpos($result, '<!DOCTYPE ') !== false) {
-                $error_msg = __('Error, invalid API key.', 'fathom-analytics-conversions');
+                $error_msg = __('ERROR: The API Key you have entered does not have access to this site.', 'fathom-analytics-conversions');
                 $return['body'] = 'html';
             }
         }
@@ -205,7 +205,7 @@ function fac_save_fathom_api($url='', $body='') {
         }
         else {
             if(strpos($result, '<!DOCTYPE ') !== false) {
-                $error_msg = __('Error, invalid API key.', 'fathom-analytics-conversions');
+                $error_msg = __('ERROR: The API Key you have entered does not have access to this site.', 'fathom-analytics-conversions');
                 $return['body'] = 'html';
             }
         }
