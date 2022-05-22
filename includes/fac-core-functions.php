@@ -45,16 +45,18 @@ $fac4wp_options = fac4wp_reload_options();
 
 // get admin tracking from Fathom Analytics
 function fac_fathom_get_admin_tracking() {
-    if(!defined('FATHOM_ADMIN_TRACKING_OPTION_NAME')) define('FATHOM_ADMIN_TRACKING_OPTION_NAME', 'fathom_track_admin');
+    //if(!defined('FATHOM_ADMIN_TRACKING_OPTION_NAME')) define('FATHOM_ADMIN_TRACKING_OPTION_NAME', 'fathom_track_admin');
 
-    return get_option(FATHOM_ADMIN_TRACKING_OPTION_NAME, '');
+    //return get_option(FATHOM_ADMIN_TRACKING_OPTION_NAME, '');
+    return get_option('fathom_track_admin', '');
 }
 
 // get Site ID from Fathom Analytics
 function fac_fathom_get_site_id() {
-    if(!defined('FATHOM_SITE_ID_OPTION_NAME')) define('FATHOM_SITE_ID_OPTION_NAME', 'fathom_site_id');
+    //if(!defined('FATHOM_SITE_ID_OPTION_NAME')) define('FATHOM_SITE_ID_OPTION_NAME', 'fathom_site_id');
 
-    return get_option(FATHOM_SITE_ID_OPTION_NAME, '');
+    //return get_option(FATHOM_SITE_ID_OPTION_NAME, '');
+    return get_option('fathom_site_id', '');
 }
 
 // is Fathom Analytics active

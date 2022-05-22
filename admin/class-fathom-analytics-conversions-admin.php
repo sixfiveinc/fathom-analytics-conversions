@@ -329,7 +329,7 @@ class Fathom_Analytics_Conversions_Admin {
         add_settings_section(
             FAC4WP_ADMIN_GROUP_GENERAL,
             __( 'General', 'fathom-analytics-conversions' ),
-            'fac4wp_admin_output_section',
+            [$this, 'fac4wp_admin_output_section'],
             FAC4WP_ADMINSLUG
         );
 
