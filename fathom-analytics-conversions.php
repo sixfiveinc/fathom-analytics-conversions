@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Fathom Analytics Conversions
  * Plugin URI:        https://www.fathomconversions.com
- * Description:       Easily add event conversions in Wordpress plugins to Fathom Analytics
+ * Description:       Easily add event conversions in WordPress plugins to Fathom Analytics
  * Version:           1.0
  * Author:            SixFive Pty Ltd
  * Author URI:        https://www.sixfive.com.au

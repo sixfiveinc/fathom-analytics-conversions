@@ -116,30 +116,81 @@ class Fathom_Analytics_Conversions_Admin {
         echo '</span>';
     }
 
-    // admin output field
-    public function fac4wp_admin_output_field($args) {
-        global $fac4wp_options;
+	// admin output field
+	public function fac4wp_admin_output_field($args) {
+		global $fac4wp_options;
+		$_site_id   = $fac4wp_options[ FAC_OPTION_SITE_ID ];
 
-        switch ( $args['label_for'] ) {
-            case FAC4WP_ADMIN_GROUP_API_KEY: {
-                $_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
-                $_input_readonly = '';
-                //$_warning_after  = '';
+		switch ( $args['label_for'] ) {
+			case FAC4WP_ADMIN_GROUP_API_KEY: {
+				$_api_key   = $fac4wp_options[ FAC4WP_OPTION_API_KEY_CODE ];
+				$_input_readonly = '';
 
-                echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />';
-                echo wp_kses($args['description'],
-                    array(
-                        'a' => array(
-                            'href' => true,
-                        ),
-                    ));
-                //echo $_warning_after;
-                //fac_api_key();
+				echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']').'" value="' . esc_attr($_api_key) . '" ' . esc_html($_input_readonly) . ' class="regular-text" />';
+				$result = fac_api_key();
+				//echo '<pre>';print_r($result);echo '</pre>';
+				if ( isset( $result['code'] ) && $result['code'] === 200 ) {
+					$body = isset( $result['body'] ) ? json_decode( $result['body'], true ) : array();
+					//echo '<pre>';print_r($body);echo '</pre>';
+					$r_site_id = isset( $body['id'] ) ? $body['id'] : '';
+					$r_site_name = isset( $body['name'] ) ? $body['name'] : '';
+					$site_name = get_site_url();
+					$site_name = preg_replace('#^https?://#i', '', $site_name);
+					if( $_site_id !== $r_site_id || $r_site_name !== $site_name ) $result['error'] = 'ERROR: The API Key you have entered does not have access to this site.';
+					else {
+						echo '<span class="fac_connected">';
+						echo esc_html( __( 'Connected', 'fathom-analytics-conversions' ) );
+						echo '</span>';
+					}
+				}
+				echo '<br>';
+				echo wp_kses($args['description'],
+					array(
+						'a' => array(
+							'href' => true,
+						),
+					));
 
-                break;
-            }
+				//if(get_current_user_id() === 2) {
+				if( isset( $result['error'] ) && ! empty( $result['error'] ) ) {
+					echo '<p class="fac_error">' . esc_html( $result['error'] ) . '</p>';
+				}
+				else {
+					// check cf7 forms.
+					fac_check_cf7_forms();
+					fac_check_wpforms_forms();
+				}
+				//}
 
-            default: {
+				break;
+			}
+
+			case FAC4WP_ADMIN_GROUP_SITE_ID: {
+				$_input_readonly = ' readonly="readonly"';
+
+				echo '<input type="text" id="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']').'" value="' . esc_attr($_site_id) . '" ' . esc_html($_input_readonly) . ' class="regular-text" /><br />' . esc_html($args['description']);
+				if(empty($_site_id)) {
+					echo '<p class="fac_error">'.
+						sprintf(
+							wp_kses(
+								__('Please enter site ID on <a href="%s" target="_blank" rel="noopener">Fathom Analytics settings page</a>.', 'fathom-analytics-conversions'),
+								array(
+									'a' => array(
+										'href' => true,
+										'target' => true,
+										'rel' => true,
+									),
+								)
+							),
+							'?page=fathom-analytics'
+						)
+						.'</p>';
+				}
+
+				break;
+			}
+
+			default: {
                 $opt_val = $fac4wp_options[ $args['option_field_id'] ];
 
                 switch ( gettype( $opt_val ) ) {
@@ -261,6 +312,12 @@ class Fathom_Analytics_Conversions_Admin {
                 'phase'         => FAC4WP_PHASE_STABLE,
                 'plugin_to_check' => 'contact-form-7/wp-contact-form-7.php',
             ),
+            FAC4WP_OPTION_INTEGRATE_WPFORMS                 => array(
+                'label'         => __( 'WPForms', 'fathom-analytics-conversions' ),
+                'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+                'phase'         => FAC4WP_PHASE_STABLE,
+                'plugin_to_check' => 'wpforms/wpforms.php',
+            ),
         );
         global $fac4wp_integrate_field_texts;
 
@@ -269,10 +326,10 @@ class Fathom_Analytics_Conversions_Admin {
             ]
         );
 
-        /*add_settings_section(
+        add_settings_section(
             FAC4WP_ADMIN_GROUP_GENERAL,
             __( 'General', 'fathom-analytics-conversions' ),
-            'fac4wp_admin_output_section',
+            [$this, 'fac4wp_admin_output_section'],
             FAC4WP_ADMINSLUG
         );
 
@@ -286,7 +343,19 @@ class Fathom_Analytics_Conversions_Admin {
                 'label_for'   => FAC4WP_ADMIN_GROUP_API_KEY,
                 'description' => __( 'Enter your Fathom API key here.', 'fathom-analytics-conversions' ) . ' Get API key <a href="https://app.usefathom.com/#/settings/api" target="_blank">here</a>.',
             )
-        );*/
+        );
+
+        add_settings_field(
+            FAC4WP_ADMIN_GROUP_SITE_ID,
+            __( 'Site ID', 'fathom-analytics-conversions' ),
+            [$this, 'fac4wp_admin_output_field'],
+            FAC4WP_ADMINSLUG,
+            FAC4WP_ADMIN_GROUP_GENERAL,
+            array(
+                'label_for'   => FAC4WP_ADMIN_GROUP_SITE_ID,
+                'description' => __( 'Site ID from Fathom Analytics.', 'fathom-analytics-conversions' ),
+            )
+        );
 
         add_settings_section(
             FAC4WP_ADMIN_GROUP_INTEGRATION,
@@ -332,7 +401,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
 
-    function fac4wp_show_admin_page() {
+    public function fac4wp_show_admin_page() {
         //global $gtp4wp_plugin_url;
         ?>
         <div class="wrap">
@@ -348,7 +417,7 @@ class Fathom_Analytics_Conversions_Admin {
         <?php
     }
 
-    function fac_admin_notices() {
+    public function fac_admin_notices() {
         if( !file_exists(WP_PLUGIN_DIR.'/fathom-analytics/fathom-analytics.php') ) {
 
             $notice = '<div class="error" id="messages"><p>';
@@ -406,7 +475,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
     // add meta box to CF7 form admin
-    function fac_cf7_meta_box($panels) {
+    public function fac_cf7_meta_box($panels) {
         global $fac4wp_options;
         $new_page = [];
         if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] ) {
@@ -460,9 +529,106 @@ class Fathom_Analytics_Conversions_Admin {
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
-            $fac_cf7_val = sanitize_text_field($_POST['fac_cf7']);
+            $fac_cf7_val = fac_array_map_recursive( 'esc_attr', $_POST['fac_cf7'] );
 
             update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
+        }
+    }
+
+    // check to add/update event id to new cf7 form
+    public function fac_wpcf7_after_save($args) {
+        $form_id = $args->id;
+        $title = wp_slash( $args->title );
+
+        $fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
+        $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
+        if(empty($fac_cf7_event_id)) {
+            fa_add_event_id_to_cf7($form_id, $title);
+        }
+        else {
+            // check if event id exist
+            $event = fac_get_fathom_event($fac_cf7_event_id);
+            if( $event['code'] !== 200 ) {
+                fa_add_event_id_to_cf7($form_id, $title);
+            }
+            else fac_update_fathom_event($fac_cf7_event_id, $title);
+        }
+
+    }
+
+    // check to add event id to new WPForms form
+    public function fac_wp_insert_post_wpforms($post_ID, $post) {
+        // check if is a WPForms form
+        if(isset($post->post_type) && $post->post_type === 'wpforms') {
+            // get form content
+            $form_content = $post->post_content;
+
+            // get form data
+            if ( ! $form_content || empty( $form_content ) ) {
+                $form_data = false;
+            }
+            else $form_data =  wp_unslash( json_decode( $form_content, true ) );
+
+            // get form setting
+            $form_settings = $form_data['settings'];
+            $wpforms_event_id = isset($form_settings['fac_wpforms_event_id']) ? $form_settings['fac_wpforms_event_id'] : '';
+            $title = $post->post_title;
+
+            // add/update event id
+            if(empty($wpforms_event_id)) {
+                fa_add_event_id_to_wpforms($post_ID, $title);
+            }
+            else {
+                // check if event id exist
+                $event = fac_get_fathom_event($wpforms_event_id);
+                if( $event['code'] !== 200 ) {
+                    fa_add_event_id_to_wpforms($post_ID, $title);
+                }
+                else fac_update_fathom_event($wpforms_event_id, $title);
+            }
+        }
+    }
+
+    // add settings section to WPForms form admin
+    public function fac_wpforms_builder_settings_sections($sections) {
+        global $fac4wp_options;
+        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
+            $sections['fac-wpforms'] = __( 'Fathom Analytics', 'fathom-analytics-conversions' );
+        }
+
+        return $sections;
+    }
+
+    // WPForms custom panel
+    public function fac_wpforms_form_settings_panel_content($settings) {
+        global $fac4wp_options;
+        if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] ) {
+            echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-fac-wpforms">';
+            echo '<div class="wpforms-panel-content-section-title">';
+            esc_html_e('Fathom Analytics', 'fathom-analytics-conversions');
+            echo '</div>';
+            if (function_exists('wpforms_panel_field')) {
+                wpforms_panel_field(
+                    'text',
+                    'settings',
+                    'fac_wpforms_event_id',
+                    $settings->form_data,
+                    esc_html__('Event ID', 'fathom-analytics-conversions'),
+                    array(
+                        /*'input_id'    => 'wpforms-panel-field-confirmations-redirect-' . $id,
+                        'input_class' => 'wpforms-panel-field-confirmations-redirect',
+                        'parent'      => 'settings',
+                        'subsection'  => $id,*/
+                        'after' => '<p class="note"><a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">'.
+                            esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions')
+                            . '</a>' . '</p>',
+                    )
+                );
+            }
+
+            do_action('wpforms_form_settings_fac-wpforms', $this);
+
+            echo '</div>';
         }
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
  *
@@ -29,3 +28,14 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+global $wpdb;
+
+delete_option( 'fac4wp-options' );
+
+$results = $wpdb->query(
+	$wpdb->prepare(
+		"DELETE FROM $wpdb->options WHERE option_name LIKE %s;",
+		$wpdb->esc_like('fac_cf7_') . '%'
+	)
+);

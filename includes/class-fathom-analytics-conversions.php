@@ -80,6 +80,7 @@ class Fathom_Analytics_Conversions {
         define( 'FAC_FATHOM_TRACK_ADMIN', 'fac-fathom-track-admin' );
 
         define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
+        define( 'FAC4WP_OPTION_INTEGRATE_WPFORMS', 'integrate-wpforms' );
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -174,6 +175,7 @@ class Fathom_Analytics_Conversions {
 
         define( 'FAC4WP_ADMIN_GROUP_GENERAL', 'fac4wp-admin-group-general' );
         define( 'FAC4WP_ADMIN_GROUP_API_KEY', 'fac4wp-admin-group-api-key' );
+        define( 'FAC4WP_ADMIN_GROUP_SITE_ID', 'fac4wp-admin-group-site-id' );
         define( 'FAC4WP_ADMIN_GROUP_INTEGRATION', 'fac4wp-admin-group-integration' );
 
         define( 'FAC4WP_PHASE_STABLE', 'fac4wp-phase-stable' );
@@ -188,6 +190,17 @@ class Fathom_Analytics_Conversions {
         $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_admin, 'fac_cf7_meta_box' );
         // save FAC CF7 options
         $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_cf7_save_options' );
+
+        // check to add/update event id to new cf7 form
+        $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_wpcf7_after_save', 20 );
+
+        // add settings section to WPForms form admin
+        $this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_admin, 'fac_wpforms_builder_settings_sections', 8 );
+        // FAC custom panel
+        $this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_admin, 'fac_wpforms_form_settings_panel_content' );
+
+        // check to add event id to new WPForms form
+        $this->loader->add_action( 'wp_insert_post', $plugin_admin, 'fac_wp_insert_post_wpforms', 10, 3 );
 
 	}
 
@@ -207,6 +220,8 @@ class Fathom_Analytics_Conversions {
 
         // add hidden field to CF7 form - frontend
         $this->loader->add_filter( 'wpcf7_form_hidden_fields', $plugin_public, 'fac_cf7_hidden_fields' );
+        // add hidden field to WPForms form - frontend
+        $this->loader->add_action( 'wpforms_display_submit_before', $plugin_public, 'fac_wpforms_display_submit_before' );
 
 	}
 
