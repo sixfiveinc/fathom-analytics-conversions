@@ -36,6 +36,6 @@ delete_option( 'fac4wp-options' );
 $results = $wpdb->query(
 	$wpdb->prepare(
 		"DELETE FROM $wpdb->options WHERE option_name LIKE %s;",
-		$wpdb->esc_like('fac_cf7_') . '%'
+		$wpdb->esc_like( 'fac_cf7_' ) . '%'
 	)
 );

@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom, contactform7, wpforms
 Requires at least: 5.9
 Tested up to: 6.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ This plugin makes it easy to add conversions that you used to have in Google Ana
 
 Requirements:
 *   A Fathom Account [$10 off your first month with our referral code](https://usefathom.com/ref/LBSJIU) - by using this you will support our development efforts and keeping this plugin free. OR Sign up for a [7 day free trial today](https://app.usefathom.com/register). Both options are $14/month thereafter on the basic plan.
-*   A supported  plugin listed below
+*   A supported WordPress plugin listed below
 
 Currently supported plugins: 
 
