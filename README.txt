@@ -19,6 +19,9 @@ The official Fathom Analytics plugin makes it easy to place the tracking code on
 
 Fathom Analytics Conversions is the no code answer for WordPress and Fathom Analytics users. You need to technical knowledge to implement events.
 
+= Warning BETA API in use =
+This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
+
 = Key Features =
 
 * Automated backend creation of events for your forms
