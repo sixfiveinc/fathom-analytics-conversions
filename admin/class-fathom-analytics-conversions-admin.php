@@ -630,6 +630,7 @@ class Fathom_Analytics_Conversions_Admin {
                         'input_class' => 'wpforms-panel-field-confirmations-redirect',
                         'parent'      => 'settings',
                         'subsection'  => $id,*/
+	                    'readonly' => 'readonly',
                         'after' => '<p class="note">This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.</p>',
                     )
                 );
