@@ -200,7 +200,18 @@ class Fathom_Analytics_Conversions_Admin {
                         echo '<input type="checkbox" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . esc_html($args['description']);
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
-                            if ( is_plugin_active( $args['plugin_to_check'] ) ) {
+							$is_plugin_active = 0;
+                            if ( is_array( $args['plugin_to_check'] ) ) {
+								foreach ( $args['plugin_to_check'] as $plugin ) {
+                                    if ( is_plugin_active( $plugin ) ) {
+                                        $is_plugin_active = 1;
+                                    }
+                                }
+                            }
+                            elseif ( is_plugin_active( $args['plugin_to_check'] ) ) {
+                                $is_plugin_active = 1;
+							}
+                            if ( $is_plugin_active ) {
                                 echo '<br />';
                                 echo wp_kses(
                                     __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', 'fathom-analytics-conversions' ),
@@ -221,7 +232,7 @@ class Fathom_Analytics_Conversions_Admin {
                                             ],
                                         ]
                                     ),
-                                    $args['plugin_to_check']
+                                    is_array( $args['plugin_to_check'] ) ? implode( ' or ', $args['plugin_to_check'] ) : $args['plugin_to_check']
                                 );
                             }
                         }
@@ -318,7 +329,7 @@ class Fathom_Analytics_Conversions_Admin {
                 'label'         => __( 'WPForms', 'fathom-analytics-conversions' ),
                 'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
                 'phase'         => FAC4WP_PHASE_STABLE,
-                'plugin_to_check' => 'wpforms/wpforms.php',
+                'plugin_to_check' => ['wpforms/wpforms.php', 'wpforms-lite/wpforms.php'],
             ),
         );
         global $fac4wp_integrate_field_texts;
