@@ -1,10 +1,12 @@
-# Fathom Analytics Conversions
-
 [![GitHub issues](https://img.shields.io/github/issues/65/fathom-analytics-conversions)](https://github.com/65/fathom-analytics-conversions/issues) 
 
 # Fathom Analytics Conversions
 
 This plugin makes it easy to add conversions that you used to have in Google Analytics into [Fathom Analytics](https://usefathom.com). Whilst they have produced a WordPress plugin to make it easy to place their tracking code on the page, the ability to add conversions still requires some level of technical knowledge and this plugin aims to reduce that. 
+
+## *Warning* BETA API in use
+This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
+
 
 ## Download 
 Get the plugin from the [WordPress Repository](https://wordpress.org/plugins/fathom-analytics-conversions/) for download and installation instructions.
