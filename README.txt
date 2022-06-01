@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,6 +18,9 @@ This plugin makes it easy to add conversions from WordPress forms into [Fathom A
 The official Fathom Analytics plugin makes it easy to place the tracking code on the page, it does not add the ability to create events/conversions easily.
 
 Fathom Analytics Conversions is the no code answer for WordPress and Fathom Analytics users. You need to technical knowledge to implement events.
+
+= Warning BETA API in use =
+This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
 
 = Key Features =
 

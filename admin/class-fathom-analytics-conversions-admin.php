@@ -148,6 +148,8 @@ class Fathom_Analytics_Conversions_Admin {
 					array(
 						'a' => array(
 							'href' => true,
+							'target' => true,
+							'rel' => true,
 						),
 					));
 
@@ -198,7 +200,18 @@ class Fathom_Analytics_Conversions_Admin {
                         echo '<input type="checkbox" id="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" name="' . esc_attr(FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']').'" value="1" ' . checked( 1, $opt_val, false ) . ' /><br />' . esc_html($args['description']);
 
                         if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
-                            if ( is_plugin_active( $args['plugin_to_check'] ) ) {
+							$is_plugin_active = 0;
+                            if ( is_array( $args['plugin_to_check'] ) ) {
+								foreach ( $args['plugin_to_check'] as $plugin ) {
+                                    if ( is_plugin_active( $plugin ) ) {
+                                        $is_plugin_active = 1;
+                                    }
+                                }
+                            }
+                            elseif ( is_plugin_active( $args['plugin_to_check'] ) ) {
+                                $is_plugin_active = 1;
+							}
+                            if ( $is_plugin_active ) {
                                 echo '<br />';
                                 echo wp_kses(
                                     __( 'This plugin is <strong class="fac4wp-plugin-active">active</strong>, it is strongly recommended to enable this integration!', 'fathom-analytics-conversions' ),
@@ -219,7 +232,7 @@ class Fathom_Analytics_Conversions_Admin {
                                             ],
                                         ]
                                     ),
-                                    $args['plugin_to_check']
+                                    is_array( $args['plugin_to_check'] ) ? implode( ' or ', $args['plugin_to_check'] ) : $args['plugin_to_check']
                                 );
                             }
                         }
@@ -316,7 +329,7 @@ class Fathom_Analytics_Conversions_Admin {
                 'label'         => __( 'WPForms', 'fathom-analytics-conversions' ),
                 'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
                 'phase'         => FAC4WP_PHASE_STABLE,
-                'plugin_to_check' => 'wpforms/wpforms.php',
+                'plugin_to_check' => ['wpforms/wpforms.php', 'wpforms-lite/wpforms.php'],
             ),
         );
         global $fac4wp_integrate_field_texts;
@@ -491,7 +504,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
     public function fac_cf7_box($args) {
-        $cf7_id = $args->id;
+        $cf7_id = $args->id();
         $fac_cf7_defaults = array();
         $fac_cf7 = get_option( 'fac_cf7_'.$cf7_id, $fac_cf7_defaults );
         $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
@@ -507,12 +520,10 @@ class Fathom_Analytics_Conversions_Admin {
                         </label>
                     </th>
                     <td>
-                        <input type="text" id="fac_cf7_event_id" name="fac_cf7[event_id]" class="" value="<?php echo esc_attr($fac_cf7_event_id);?>">
-                        <p>
-                            <a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">
-                            <?php echo esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions');?>
-                            </a>
-                        </p>
+                        <input type="text" id="fac_cf7_event_id" name="fac_cf7[event_id]" class="" value="<?php echo esc_attr($fac_cf7_event_id);?>" readonly>
+
+                        <p class="note">This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.</p>
+
                     </td>
                 </tr>
                 </tbody>
@@ -524,21 +535,21 @@ class Fathom_Analytics_Conversions_Admin {
 
     // save FAC CF7 options
     public function fac_cf7_save_options($args) {
-        if(!empty($_POST)){
+        if ( ! empty( $_POST ) && isset( $_POST['fac_cf7'] ) ){
 
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
             $fac_cf7_val = fac_array_map_recursive( 'esc_attr', $_POST['fac_cf7'] );
 
-            update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
+            update_option( 'fac_cf7_' . $args->id(), $fac_cf7_val );
         }
     }
 
     // check to add/update event id to new cf7 form
     public function fac_wpcf7_after_save($args) {
-        $form_id = $args->id;
-        $title = wp_slash( $args->title );
+        $form_id = $args->id();
+        $title = wp_slash( $args->title() );
 
         $fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
         $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
@@ -619,9 +630,8 @@ class Fathom_Analytics_Conversions_Admin {
                         'input_class' => 'wpforms-panel-field-confirmations-redirect',
                         'parent'      => 'settings',
                         'subsection'  => $id,*/
-                        'after' => '<p class="note"><a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">'.
-                            esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions')
-                            . '</a>' . '</p>',
+	                    'readonly' => 'readonly',
+                        'after' => '<p class="note">This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.</p>',
                     )
                 );
             }
