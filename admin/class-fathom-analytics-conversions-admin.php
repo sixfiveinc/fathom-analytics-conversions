@@ -509,7 +509,7 @@ class Fathom_Analytics_Conversions_Admin {
                         </label>
                     </th>
                     <td>
-                        <input type="text" id="fac_cf7_event_id" name="fac_cf7[event_id]" class="" value="<?php echo esc_attr($fac_cf7_event_id);?>">
+                        <input type="text" id="fac_cf7_event_id" name="fac_cf7[event_id]" class="" value="<?php echo esc_attr($fac_cf7_event_id);?>" readonly>
                         <p>
                             <a href="https://app.tango.us/app/workflow/Creating-Events-with-Fathom-94b0b00ff9b04b548bf4910188f97902" target="_blank">
                             <?php echo esc_html__('Creating Events with Fathom', 'fathom-analytics-conversions');?>
