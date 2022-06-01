@@ -265,7 +265,7 @@ function fac_check_cf7_forms() {
 				//echo '<pre>';print_r($form);echo '</pre>';
 				$form_id          = $form->ID;
 				$fac_cf7          = get_option( 'fac_cf7_' . $form_id, [] );
-				$fac_cf7_event_id = isset( $fac_cf7['event_id'] ) ? $fac_cf7['event_id'] : '';
+				$fac_cf7_event_id = is_array( $fac_cf7 ) && isset( $fac_cf7['event_id'] ) ? $fac_cf7['event_id'] : '';
 				$title            = $form->post_title;
 				if ( empty( $fac_cf7_event_id ) ) {
 					fa_add_event_id_to_cf7( $form_id, $title );
@@ -291,8 +291,10 @@ function fa_add_event_id_to_cf7( $form_id = 0, $title = '' ) {
 			$event_id   = isset( $event_body->id ) ? $event_body->id : '';
 			if ( ! empty( $event_id ) ) {
 				$fac_cf7             = get_option( 'fac_cf7_' . $form_id, [] );
-				$fac_cf7['event_id'] = $event_id;
-				update_option( 'fac_cf7_' . $form_id, $fac_cf7 );
+				if ( is_array( $fac_cf7 ) ) {
+					$fac_cf7['event_id'] = $event_id;
+					update_option( 'fac_cf7_' . $form_id, $fac_cf7 );
+				}
 			}
 		}
 		//echo '<pre>';print_r($event_body);echo '</pre>';

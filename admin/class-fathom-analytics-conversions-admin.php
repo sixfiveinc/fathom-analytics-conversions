@@ -148,6 +148,8 @@ class Fathom_Analytics_Conversions_Admin {
 					array(
 						'a' => array(
 							'href' => true,
+							'target' => true,
+							'rel' => true,
 						),
 					));
 
@@ -491,7 +493,7 @@ class Fathom_Analytics_Conversions_Admin {
     }
 
     public function fac_cf7_box($args) {
-        $cf7_id = $args->id;
+        $cf7_id = $args->id();
         $fac_cf7_defaults = array();
         $fac_cf7 = get_option( 'fac_cf7_'.$cf7_id, $fac_cf7_defaults );
         $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
@@ -524,21 +526,21 @@ class Fathom_Analytics_Conversions_Admin {
 
     // save FAC CF7 options
     public function fac_cf7_save_options($args) {
-        if(!empty($_POST)){
+        if ( ! empty( $_POST ) && isset( $_POST['fac_cf7'] ) ){
 
             $default = array () ;
             //$fac_cf7 = get_option( 'fac_cf7'.$args->id(), $default );
 
             $fac_cf7_val = fac_array_map_recursive( 'esc_attr', $_POST['fac_cf7'] );
 
-            update_option( 'fac_cf7_'.$args->id(), $fac_cf7_val );
+            update_option( 'fac_cf7_' . $args->id(), $fac_cf7_val );
         }
     }
 
     // check to add/update event id to new cf7 form
     public function fac_wpcf7_after_save($args) {
-        $form_id = $args->id;
-        $title = wp_slash( $args->title );
+        $form_id = $args->id();
+        $title = wp_slash( $args->title() );
 
         $fac_cf7 = get_option( 'fac_cf7_'.$form_id, [] );
         $fac_cf7_event_id = isset($fac_cf7['event_id']) ? $fac_cf7['event_id'] : '';
