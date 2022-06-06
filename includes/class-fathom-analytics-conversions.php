@@ -125,6 +125,18 @@ class Fathom_Analytics_Conversions {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-admin.php';
 
 		/**
+		 * The class responsible for defining all actions that occur in the plugin Contact Form 7
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-wpcf7.php';
+
+		/**
+		 * The class responsible for defining all actions that occur in the plugin WPForms
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-wpforms.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -166,6 +178,8 @@ class Fathom_Analytics_Conversions {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Fathom_Analytics_Conversions_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_wpcf7 = new Fathom_Analytics_Conversions_WPCF7( $this->get_plugin_name(), $this->get_version() );
+		$plugin_wpforms = new Fathom_Analytics_Conversions_WPForms( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -186,21 +200,22 @@ class Fathom_Analytics_Conversions {
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
         // admin notices
         $this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
+
         // add meta box to CF7 form admin
-        $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_admin, 'fac_cf7_meta_box' );
+        $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_wpcf7, 'fac_cf7_meta_box' );
         // save FAC CF7 options
-        $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_cf7_save_options' );
+        $this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_cf7_save_options' );
 
         // check to add/update event id to new cf7 form
-        $this->loader->add_action( 'wpcf7_after_save', $plugin_admin, 'fac_wpcf7_after_save', 20 );
+        $this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_wpcf7_after_save', 20 );
 
         // add settings section to WPForms form admin
-        $this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_admin, 'fac_wpforms_builder_settings_sections', 8 );
+        $this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_wpforms, 'fac_wpforms_builder_settings_sections', 8 );
         // FAC custom panel
-        $this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_admin, 'fac_wpforms_form_settings_panel_content' );
+        $this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_wpforms, 'fac_wpforms_form_settings_panel_content' );
 
         // check to add event id to new WPForms form
-        $this->loader->add_action( 'wp_insert_post', $plugin_admin, 'fac_wp_insert_post_wpforms', 10, 3 );
+        $this->loader->add_action( 'wp_insert_post', $plugin_wpforms, 'fac_wp_insert_post_wpforms', 10, 3 );
 
 	}
 
