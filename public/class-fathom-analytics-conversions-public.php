@@ -119,15 +119,15 @@ class Fathom_Analytics_Conversions_Public {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS, true );
-				//wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js//fac-gforms-tracker.js' ), $in_footer );
+				// wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js//fac-gforms-tracker.js' ), $in_footer );
 				wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
 				$gforms_data = array();
 				if ( class_exists( 'GFAPI' ) ) {
-					$gf_forms = GFAPI::get_forms( true, false ); // get all gforms
+					$gf_forms = GFAPI::get_forms( true, false ); // get all gforms.
 					if ( $gf_forms ) {
 						foreach ( $gf_forms as $form ) {
 							$form_id                 = $form['id'];
-							$fac_gf                  = get_option( 'gforms_fac_' . $form_id, [] );
+							$fac_gf                  = get_option( 'gforms_fac_' . $form_id, array() );
 							$fac_gf_event_id         = is_array( $fac_gf ) && isset( $fac_gf['event_id'] ) ? $fac_gf['event_id'] : '';
 							$gforms_data[ $form_id ] = $fac_gf_event_id;
 						}
@@ -183,7 +183,7 @@ class Fathom_Analytics_Conversions_Public {
 	public function fac_gform_pre_render( $form ) {
 		global $fac4wp_options;
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && $form['id'] && class_exists( 'GF_Fields' ) ) {
-			$fac_gf          = get_option( 'gforms_fac_' . $form['id'], [] );
+			$fac_gf          = get_option( 'gforms_fac_' . $form['id'], array() );
 			$fac_gf_event_id = is_array( $fac_gf ) && isset( $fac_gf['event_id'] ) ? $fac_gf['event_id'] : '';
 			if ( ! empty( $fac_gf_event_id ) ) {
 				$props = array(
@@ -211,7 +211,7 @@ class Fathom_Analytics_Conversions_Public {
 	public function fac_gform_submit_button( $button_input, $form ) {
 		global $fac4wp_options;
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && $form['id'] && class_exists( 'GF_Fields' ) ) {
-			$fac_gf          = get_option( 'gforms_fac_' . $form['id'], [] );
+			$fac_gf          = get_option( 'gforms_fac_' . $form['id'], array() );
 			$fac_gf_event_id = is_array( $fac_gf ) && isset( $fac_gf['event_id'] ) ? $fac_gf['event_id'] : '';
 			if ( ! empty( $fac_gf_event_id ) ) {
 				$button_input .= "<input type='hidden' class='gform_hidden' name='fac_gforms_event_id' value='{$fac_gf_event_id}' />";
