@@ -119,7 +119,7 @@ class Fathom_Analytics_Conversions_Public {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS, true );
-				// wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js//fac-gforms-tracker.js' ), $in_footer );
+				// wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js/fac-gforms-tracker.js' ), $in_footer );
 				wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
 				$gforms_data = array();
 				if ( class_exists( 'GFAPI' ) ) {
