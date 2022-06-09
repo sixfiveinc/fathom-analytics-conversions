@@ -331,6 +331,12 @@ class Fathom_Analytics_Conversions_Admin {
                 'phase'         => FAC4WP_PHASE_STABLE,
                 'plugin_to_check' => ['wpforms/wpforms.php', 'wpforms-lite/wpforms.php'],
             ),
+			FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS            => array(
+				'label'         => __( 'Gravity Forms', 'fathom-analytics-conversions' ),
+				'description'   => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'phase'         => FAC4WP_PHASE_STABLE,
+				'plugin_to_check' => 'gravityforms/gravityforms.php',
+			),
         );
         global $fac4wp_integrate_field_texts;
 

@@ -35,7 +35,7 @@ class Fathom_Analytics_Conversions {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Fathom_Analytics_Conversions_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Fathom_Analytics_Conversions_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -44,7 +44,7 @@ class Fathom_Analytics_Conversions {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -53,7 +53,7 @@ class Fathom_Analytics_Conversions {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
 
@@ -69,18 +69,20 @@ class Fathom_Analytics_Conversions {
 	public function __construct() {
 		if ( defined( 'FATHOM_ANALYTICS_CONVERSIONS_VERSION' ) ) {
 			$this->version = FATHOM_ANALYTICS_CONVERSIONS_VERSION;
-		} else {
+		}
+		else {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'fathom-analytics-conversions';
 
-        define( 'FAC4WP_OPTIONS', 'fac4wp-options' );
-        define( 'FAC4WP_OPTION_API_KEY_CODE', 'fac-api-key-code' );
-        define( 'FAC_OPTION_SITE_ID', 'fac-site-id' );
-        define( 'FAC_FATHOM_TRACK_ADMIN', 'fac-fathom-track-admin' );
+		define( 'FAC4WP_OPTIONS', 'fac4wp-options' );
+		define( 'FAC4WP_OPTION_API_KEY_CODE', 'fac-api-key-code' );
+		define( 'FAC_OPTION_SITE_ID', 'fac-site-id' );
+		define( 'FAC_FATHOM_TRACK_ADMIN', 'fac-fathom-track-admin' );
 
-        define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
-        define( 'FAC4WP_OPTION_INTEGRATE_WPFORMS', 'integrate-wpforms' );
+		define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
+		define( 'FAC4WP_OPTION_INTEGRATE_WPFORMS', 'integrate-wpforms' );
+		define( 'FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS', 'integrate-gravityforms' );
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -137,15 +139,21 @@ class Fathom_Analytics_Conversions {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-wpforms.php';
 
 		/**
+		 * The class responsible for defining all actions that occur in the plugin Gravity Forms
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-gravityforms.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fathom-analytics-conversions-public.php';
 
-        /**
-         * The core functions available on both the front-end and admin
-         */
-        require_once FAC4WP_PATH . '/includes/fac-core-functions.php';
+		/**
+		 * The core functions available on both the front-end and admin
+		 */
+		require_once FAC4WP_PATH . '/includes/fac-core-functions.php';
 
 		$this->loader = new Fathom_Analytics_Conversions_Loader();
 
@@ -177,45 +185,55 @@ class Fathom_Analytics_Conversions {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Fathom_Analytics_Conversions_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_wpcf7 = new Fathom_Analytics_Conversions_WPCF7( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin   = new Fathom_Analytics_Conversions_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_wpcf7   = new Fathom_Analytics_Conversions_WPCF7( $this->get_plugin_name(), $this->get_version() );
 		$plugin_wpforms = new Fathom_Analytics_Conversions_WPForms( $this->get_plugin_name(), $this->get_version() );
+		$plugin_gf      = new Fathom_Analytics_Conversions_GravityForms( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-        define( 'FAC4WP_ADMINSLUG', 'fac4wp-settings' );
-        define( 'FAC4WP_ADMIN_GROUP', 'fac4wp-admin-group' );
+		define( 'FAC4WP_ADMINSLUG', 'fac4wp-settings' );
+		define( 'FAC4WP_ADMIN_GROUP', 'fac4wp-admin-group' );
 
-        define( 'FAC4WP_ADMIN_GROUP_GENERAL', 'fac4wp-admin-group-general' );
-        define( 'FAC4WP_ADMIN_GROUP_API_KEY', 'fac4wp-admin-group-api-key' );
-        define( 'FAC4WP_ADMIN_GROUP_SITE_ID', 'fac4wp-admin-group-site-id' );
-        define( 'FAC4WP_ADMIN_GROUP_INTEGRATION', 'fac4wp-admin-group-integration' );
+		define( 'FAC4WP_ADMIN_GROUP_GENERAL', 'fac4wp-admin-group-general' );
+		define( 'FAC4WP_ADMIN_GROUP_API_KEY', 'fac4wp-admin-group-api-key' );
+		define( 'FAC4WP_ADMIN_GROUP_SITE_ID', 'fac4wp-admin-group-site-id' );
+		define( 'FAC4WP_ADMIN_GROUP_INTEGRATION', 'fac4wp-admin-group-integration' );
 
-        define( 'FAC4WP_PHASE_STABLE', 'fac4wp-phase-stable' );
+		define( 'FAC4WP_PHASE_STABLE', 'fac4wp-phase-stable' );
 
-        // admin settings/sections
-        $this->loader->add_action( 'admin_init', $plugin_admin, 'fac4wp_admin_init' );
-        // admin menu page
-        $this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
-        // admin notices
-        $this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
+		// admin settings/sections
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'fac4wp_admin_init' );
+		// admin menu page
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
+		// admin notices
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
 
-        // add meta box to CF7 form admin
-        $this->loader->add_filter( 'wpcf7_editor_panels', $plugin_wpcf7, 'fac_cf7_meta_box' );
-        // save FAC CF7 options
-        $this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_cf7_save_options' );
+		// add meta box to CF7 form admin
+		$this->loader->add_filter( 'wpcf7_editor_panels', $plugin_wpcf7, 'fac_cf7_meta_box' );
+		// save FAC CF7 options
+		$this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_cf7_save_options' );
 
-        // check to add/update event id to new cf7 form
-        $this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_wpcf7_after_save', 20 );
+		// check to add/update event id to new cf7 form
+		$this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_wpcf7_after_save', 20 );
 
-        // add settings section to WPForms form admin
-        $this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_wpforms, 'fac_wpforms_builder_settings_sections', 8 );
-        // FAC custom panel
-        $this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_wpforms, 'fac_wpforms_form_settings_panel_content' );
+		// add settings section to WPForms form admin
+		$this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_wpforms, 'fac_wpforms_builder_settings_sections', 8 );
+		// FAC custom panel
+		$this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_wpforms, 'fac_wpforms_form_settings_panel_content' );
 
-        // check to add event id to new WPForms form
-        $this->loader->add_action( 'wp_insert_post', $plugin_wpforms, 'fac_wp_insert_post_wpforms', 10, 3 );
+		// check to add event id to new WPForms form
+		$this->loader->add_action( 'wp_insert_post', $plugin_wpforms, 'fac_wp_insert_post_wpforms', 10, 3 );
+
+		// add settings tab to Gravity Forms form admin
+		$this->loader->add_filter( 'gform_form_settings_menu', $plugin_gf, 'fac_gform_form_settings_menu' );
+		// render setting page
+		$this->loader->add_filter( 'gform_form_settings_page_fac-gform', $plugin_gf, 'fac_gform_render_settings_page' );
+		// Initialize whether Ajax is on or off
+		$this->loader->add_filter( 'gform_form_args', $plugin_gf, 'fac_gform_ajax_only', 15 );
+		// check to add event id to new WPForms form
+		$this->loader->add_action( 'gform_after_save_form', $plugin_gf, 'fac_gform_after_save_form', 10, 2 );
 
 	}
 
@@ -233,10 +251,14 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-        // add hidden field to CF7 form - frontend
-        $this->loader->add_filter( 'wpcf7_form_hidden_fields', $plugin_public, 'fac_cf7_hidden_fields' );
-        // add hidden field to WPForms form - frontend
-        $this->loader->add_action( 'wpforms_display_submit_before', $plugin_public, 'fac_wpforms_display_submit_before' );
+		// add hidden field to CF7 form - frontend
+		$this->loader->add_filter( 'wpcf7_form_hidden_fields', $plugin_public, 'fac_cf7_hidden_fields' );
+		// add hidden field to WPForms form - frontend
+		$this->loader->add_action( 'wpforms_display_submit_before', $plugin_public, 'fac_wpforms_display_submit_before' );
+		// add hidden field to GravityForms form - frontend
+		//$this->loader->add_action( 'gform_pre_render', $plugin_public, 'fac_gform_pre_render' );
+		//$this->loader->add_action( 'gform_pre_submission_filter', $plugin_public, 'fac_gform_pre_render' );
+		//$this->loader->add_action( 'gform_submit_button', $plugin_public, 'fac_gform_submit_button', 10, 2 );
 
 	}
 
@@ -253,8 +275,8 @@ class Fathom_Analytics_Conversions {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -263,8 +285,8 @@ class Fathom_Analytics_Conversions {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    Fathom_Analytics_Conversions_Loader    Orchestrates the hooks of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -273,8 +295,8 @@ class Fathom_Analytics_Conversions {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_version() {
 		return $this->version;
