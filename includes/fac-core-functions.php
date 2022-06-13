@@ -138,6 +138,28 @@ function fac_create_fathom_event( $name ) {
 	return $return;
 }
 
+/**
+ * Add new fathom event
+ *
+ * @param string $name Event name.
+ */
+function fac_add_new_fathom_event( $name ) {
+	$event_id = '';
+	if ( empty( $name ) ) {
+		return $event_id;
+	}
+	$new_event = fac_create_fathom_event( $name );
+	if ( isset( $new_event['error'] ) && empty( $new_event['error'] ) ) {
+		$event_body = $new_event['body'];
+		if ( fac_is_json( $event_body ) ) {
+			$event_body = json_decode( $event_body );
+			$event_id   = isset( $event_body->id ) ? $event_body->id : '';
+		}
+	}
+	return $event_id;
+}
+
+
 // update Fathom event name
 function fac_update_fathom_event( $event_id, $name ) {
 	global $fac4wp_options;
