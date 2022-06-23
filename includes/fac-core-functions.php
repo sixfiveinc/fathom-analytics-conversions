@@ -19,6 +19,7 @@ $fac4wp_default_options = array(
 	FAC4WP_OPTION_INTEGRATE_WPCF7        => false,
 	FAC4WP_OPTION_INTEGRATE_WPFORMS      => false,
 	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => false,
+	FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => false,
 );
 
 function fac4wp_reload_options() {
@@ -156,6 +157,7 @@ function fac_add_new_fathom_event( $name ) {
 			$event_id   = isset( $event_body->id ) ? $event_body->id : '';
 		}
 	}
+
 	return $event_id;
 }
 
@@ -454,6 +456,67 @@ function fac_check_gf_forms() {
 				else {
 					fac_update_fathom_event( $fac_gf_event_id, $title );
 				}
+			}
+		}
+	}
+}
+
+/**
+ * Check all FluentForm forms
+ */
+function fac_check_ff_forms() {
+	global $fac4wp_options, $wpdb;
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
+		$formsTable = $wpdb->prefix . 'fluentform_forms';
+		$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
+		//echo '<pre>';print_r( $firstForm );echo '</pre>';
+		if ( $fForms ) {
+			foreach ( $fForms as $form ) {
+				$form_id = $form['id'];
+				$title   = $form['title'];
+				fac_update_event_id_to_ff( $form_id, $title );
+			}
+		}
+	}
+}
+
+/**
+ * Add/update event id to FluentForm
+ *
+ * @param int $form_id The form id.
+ * @param string $title The form title.
+ */
+function fac_update_event_id_to_ff( $form_id, $title ) {
+	$fac_ff          = get_option( 'fac_fform_' . $form_id, array() );
+	$fac_ff_event_id = is_array( $fac_ff ) && isset( $fac_ff['event_id'] ) ? $fac_ff['event_id'] : '';
+	if ( empty( $fac_ff_event_id ) ) {
+		$new_event_id = fac_add_new_fathom_event( $title );
+		if ( ! empty( $new_event_id ) ) {
+			if ( is_array( $fac_ff ) ) {
+				$fac_ff['event_id'] = $new_event_id;
+				update_option( 'fac_fform_' . $form_id, $fac_ff );
+			}
+		}
+	}
+	else {
+		// Check if event id exist
+		$event = fac_get_fathom_event( $fac_ff_event_id );
+		if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
+			$new_event_id = fac_add_new_fathom_event( $title );
+			if ( ! empty( $new_event_id ) ) {
+				if ( is_array( $fac_ff ) ) {
+					$fac_ff['event_id'] = $new_event_id;
+					update_option( 'fac_fform_' . $form_id, $fac_ff );
+				}
+			}
+		}
+		else {
+			// Update event title if not match
+			$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
+			$body_object = isset( $body['object'] ) ? $body['object'] : '';
+			$body_name   = isset( $body['name'] ) ? $body['name'] : '';
+			if ( $body_object === 'event' && $body_name !== $title ) {
+				fac_update_fathom_event( $fac_ff_event_id, $title ); // Update Fathom event with the current title.
 			}
 		}
 	}

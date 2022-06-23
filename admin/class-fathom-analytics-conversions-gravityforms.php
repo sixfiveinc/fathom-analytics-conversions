@@ -64,23 +64,26 @@ class Fathom_Analytics_Conversions_GravityForms {
 	 * @since    1.0.0
 	 */
 	public function fac_gform_after_save_form( $form, $is_new ) {
-		$form_id    = $form['id'];
-		$form_title = $form['title'];
-		//echo '<pre>';print_r( $form );echo '</pre>';
-		$settings = self::form_options( $form_id );
+		global $fac4wp_options;
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] ) {
+			$form_id    = $form['id'];
+			$form_title = $form['title'];
+			//echo '<pre>';print_r( $form );echo '</pre>';
+			$settings = self::form_options( $form_id );
 
-		// add/update event id
-		if ( empty( $settings['event_id'] ) ) {
-			fa_add_event_id_to_gf( $form_id, $form_title );
-		}
-		else {
-			// check if event id exist
-			$event = fac_get_fathom_event( $settings['event_id'] );
-			if ( $event['code'] !== 200 ) {
+			// add/update event id
+			if ( empty( $settings['event_id'] ) ) {
 				fa_add_event_id_to_gf( $form_id, $form_title );
 			}
 			else {
-				fac_update_fathom_event( $settings['event_id'], $form_title );
+				// check if event id exist
+				$event = fac_get_fathom_event( $settings['event_id'] );
+				if ( $event['code'] !== 200 ) {
+					fa_add_event_id_to_gf( $form_id, $form_title );
+				}
+				else {
+					fac_update_fathom_event( $settings['event_id'], $form_title );
+				}
 			}
 		}
 	}

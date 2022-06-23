@@ -14,7 +14,7 @@
  * The url-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the gravityforms-specific stylesheet and JavaScript.
+ * enqueue the url-specific stylesheet and JavaScript.
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/url
