@@ -53,7 +53,7 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
-		// Adds setting menu on Fluent Form
+		// Adds setting menu on Fluent Form.
 		add_action( 'fluentform_form_settings_menu', array( $this, 'fac_fluentform_form_settings_menu' ) );
 		// Save the meta when post is saved.
 		add_action( 'fluentform_form_settings_container_fac_ff', array(
@@ -61,16 +61,16 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 			'fac_fluentform_form_settings_container_fac_ff'
 		) );
 
-		// Check to add event id to new form
+		// Check to add event id to new form.
 		add_action( 'fluentform_after_save_form_settings', array(
 			$this,
 			'fac_fluentform_after_save_form_settings'
 		), 10, 2 );
 
-		// Add hidden field to FF form - frontend
+		// Add hidden field to FF form - frontend.
 		add_action( 'fluentform_form_element_start', array( $this, 'fac_fluentform_form_element_start' ) );
 
-		// Add js to track the form submission
+		// Add js to track the form submission.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 	}

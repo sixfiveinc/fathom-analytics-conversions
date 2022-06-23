@@ -218,36 +218,36 @@ class Fathom_Analytics_Conversions {
 
 		define( 'FAC4WP_PHASE_STABLE', 'fac4wp-phase-stable' );
 
-		// Admin settings/sections
+		// Admin settings/sections.
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'fac4wp_admin_init' );
-		// Admin menu page
+		// Admin menu page.
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
 		// Admin notices
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
 
-		// Add meta box to CF7 form admin
+		// Add meta box to CF7 form admin.
 		$this->loader->add_filter( 'wpcf7_editor_panels', $plugin_wpcf7, 'fac_cf7_meta_box' );
 		// Save FAC CF7 options
 		$this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_cf7_save_options' );
 
-		// Check to add/update event id to new cf7 form
+		// Check to add/update event id to new cf7 form.
 		$this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_wpcf7_after_save', 20 );
 
-		// Add settings section to WPForms form admin
+		// Add settings section to WPForms form admin.
 		$this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_wpforms, 'fac_wpforms_builder_settings_sections', 8 );
 		// FAC custom panel
 		$this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_wpforms, 'fac_wpforms_form_settings_panel_content' );
 
-		// Check to add event id to new WPForms form
+		// Check to add event id to new WPForms form.
 		$this->loader->add_action( 'wp_insert_post', $plugin_wpforms, 'fac_wp_insert_post_wpforms', 10, 3 );
 
-		// Add settings tab to Gravity Forms form admin
+		// Add settings tab to Gravity Forms form admin.
 		$this->loader->add_filter( 'gform_form_settings_menu', $plugin_gf, 'fac_gform_form_settings_menu' );
 		// Render setting page
 		$this->loader->add_filter( 'gform_form_settings_page_fac-gform', $plugin_gf, 'fac_gform_render_settings_page' );
-		// Initialize whether Ajax is on or off
+		// Initialize whether Ajax is on or off.
 		$this->loader->add_filter( 'gform_form_args', $plugin_gf, 'fac_gform_ajax_only', 15 );
-		// Check to add event id to new WPForms form
+		// Check to add event id to new WPForms form.
 		$this->loader->add_action( 'gform_after_save_form', $plugin_gf, 'fac_gform_after_save_form', 10, 2 );
 
 	}
@@ -266,11 +266,11 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		// add hidden field to CF7 form - frontend
+		// add hidden field to CF7 form - frontend.
 		$this->loader->add_filter( 'wpcf7_form_hidden_fields', $plugin_public, 'fac_cf7_hidden_fields' );
-		// add hidden field to WPForms form - frontend
+		// add hidden field to WPForms form - frontend.
 		$this->loader->add_action( 'wpforms_display_submit_before', $plugin_public, 'fac_wpforms_display_submit_before' );
-		// add hidden field to GravityForms form - frontend
+		// add hidden field to GravityForms form - frontend.
 		//$this->loader->add_action( 'gform_pre_render', $plugin_public, 'fac_gform_pre_render' );
 		//$this->loader->add_action( 'gform_pre_submission_filter', $plugin_public, 'fac_gform_pre_render' );
 		//$this->loader->add_action( 'gform_submit_button', $plugin_public, 'fac_gform_submit_button', 10, 2 );
