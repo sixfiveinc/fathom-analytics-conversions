@@ -222,12 +222,12 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'fac4wp_admin_init' );
 		// Admin menu page.
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'fac_admin_menu' );
-		// Admin notices
+		// Admin notices.
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'fac_admin_notices' );
 
 		// Add meta box to CF7 form admin.
 		$this->loader->add_filter( 'wpcf7_editor_panels', $plugin_wpcf7, 'fac_cf7_meta_box' );
-		// Save FAC CF7 options
+		// Save FAC CF7 options.
 		$this->loader->add_action( 'wpcf7_after_save', $plugin_wpcf7, 'fac_cf7_save_options' );
 
 		// Check to add/update event id to new cf7 form.
@@ -235,7 +235,7 @@ class Fathom_Analytics_Conversions {
 
 		// Add settings section to WPForms form admin.
 		$this->loader->add_filter( 'wpforms_builder_settings_sections', $plugin_wpforms, 'fac_wpforms_builder_settings_sections', 8 );
-		// FAC custom panel
+		// FAC custom panel.
 		$this->loader->add_action( 'wpforms_form_settings_panel_content', $plugin_wpforms, 'fac_wpforms_form_settings_panel_content' );
 
 		// Check to add event id to new WPForms form.
@@ -243,7 +243,7 @@ class Fathom_Analytics_Conversions {
 
 		// Add settings tab to Gravity Forms form admin.
 		$this->loader->add_filter( 'gform_form_settings_menu', $plugin_gf, 'fac_gform_form_settings_menu' );
-		// Render setting page
+		// Render setting page.
 		$this->loader->add_filter( 'gform_form_settings_page_fac-gform', $plugin_gf, 'fac_gform_render_settings_page' );
 		// Initialize whether Ajax is on or off.
 		$this->loader->add_filter( 'gform_form_args', $plugin_gf, 'fac_gform_ajax_only', 15 );
