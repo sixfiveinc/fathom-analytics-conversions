@@ -362,6 +362,12 @@ class Fathom_Analytics_Conversions_Admin {
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => [ 'fluentform/fluentform.php', 'fluentformpro/fluentformpro.php' ],
 			),
+			FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => array(
+				'label'           => __( 'Ninja Forms', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'phase'           => FAC4WP_PHASE_STABLE,
+				'plugin_to_check' => 'ninja-forms/ninja-forms.php',
+			),
 		);
 		global $fac4wp_integrate_field_texts;
 

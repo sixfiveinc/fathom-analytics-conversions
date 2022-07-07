@@ -20,6 +20,7 @@ $fac4wp_default_options = array(
 	FAC4WP_OPTION_INTEGRATE_WPFORMS      => false,
 	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => false,
 	FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => false,
+	FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => false,
 );
 
 function fac4wp_reload_options() {
