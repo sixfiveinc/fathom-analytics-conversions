@@ -59,9 +59,6 @@ class Fathom_Analytics_Conversions_Ninja_Forms {
 		// Check to add event id to new form.
 		add_action( 'ninja_forms_save_form', array( $this, 'fac_ninja_forms_save_form' ), 10, 2 );
 
-		// Add event ID to NJ form - frontend submission.
-		//add_action( 'ninja_forms_after_submission', array( $this, 'fac_ninja_forms_after_submission' ) );
-
 		// Add js to track the form submission.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 

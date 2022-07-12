@@ -58,13 +58,13 @@ class Fathom_Analytics_Conversions_URL {
 		// Save the meta when post is saved.
 		add_action( 'save_post', array( $this, 'fac_save_post' ) );
 
-		// Render JS
+		// Render JS.
 		add_action( 'wp_footer', array( $this, 'fac_url_wp_footer' ), 100 );
 
 	}
 
 	/**
-	 * Register meta box(es)
+	 * Register meta box(es).
 	 *
 	 * @since    1.2
 	 */
@@ -72,8 +72,10 @@ class Fathom_Analytics_Conversions_URL {
 
 		add_meta_box( 'fac-meta-box', __( 'Fathom Analytics', 'fathom-analytics-conversions' ), array(
 			$this,
-			'fac_display_callback'
-		), null, 'side' );
+			'fac_display_callback',
+		),
+            null,
+            'side' );
 	}
 
 	/**
@@ -137,7 +139,7 @@ class Fathom_Analytics_Conversions_URL {
 			return;
 		}
 
-		// Return if autosave
+		// Return if autosave.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -159,7 +161,7 @@ class Fathom_Analytics_Conversions_URL {
 			else {
 				$title = get_the_title( $post_id ) . ' - ' . $post_id;
 			}
-			// get event id
+			// get event id.
 			$event_id = get_post_meta( $post_id, '_fac_page_event_id', true );
 			if ( empty( $event_id ) ) {
 				$new_event_id = fac_add_new_fathom_event( $title );
@@ -168,7 +170,7 @@ class Fathom_Analytics_Conversions_URL {
 				}
 			}
 			else {
-				// Check if event id exist
+				// Check if event id exist.
 				$event = fac_get_fathom_event( $event_id );
 				if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
 					$new_event_id = fac_add_new_fathom_event( $title );
@@ -177,7 +179,7 @@ class Fathom_Analytics_Conversions_URL {
 					}
 				}
 				else {
-					// Update event title if not match
+					// Update event title if not match.
 					$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
 					$body_object = isset( $body['object'] ) ? $body['object'] : '';
 					$body_name   = isset( $body['name'] ) ? $body['name'] : '';
@@ -194,7 +196,7 @@ class Fathom_Analytics_Conversions_URL {
 	}
 
 	/**
-	 * Add settings tab to Gravity Forms form admin
+	 * Add settings tab to Gravity Forms form admin.
 	 *
 	 * @since    1.0.0
 	 */
