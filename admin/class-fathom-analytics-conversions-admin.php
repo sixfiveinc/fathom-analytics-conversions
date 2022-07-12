@@ -168,6 +168,7 @@ class Fathom_Analytics_Conversions_Admin {
 					fac_check_wpforms_forms();
 					fac_check_gf_forms();
 					fac_check_ff_forms();
+					fac_check_nj_forms();
 				}
 				//}
 

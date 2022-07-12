@@ -109,7 +109,7 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 	public function fac_fluentform_form_settings_menu( $settingsMenus ) {
 		global $fac4wp_options;
 		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] ) {
-			$settingsMenus['fac_flunetform'] = array(
+			$settingsMenus['fac_fluentform'] = array(
 				'title' => __( 'Fathom Analytics', 'fathom-analytics-conversions' ),
 				'slug'  => 'fac_ff',
 				//'hash' => 'fac_fluentform',

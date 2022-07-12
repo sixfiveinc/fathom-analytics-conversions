@@ -462,7 +462,7 @@ function fac_check_gf_forms() {
 }
 
 /**
- * Check all FluentForm forms
+ * Check all FluentForm forms.
  */
 function fac_check_ff_forms() {
 	global $fac4wp_options, $wpdb;
@@ -481,7 +481,7 @@ function fac_check_ff_forms() {
 }
 
 /**
- * Add/update event id to FluentForm
+ * Add/update event id to FluentForm.
  *
  * @param int $form_id The form id.
  * @param string $title The form title.
@@ -499,7 +499,7 @@ function fac_update_event_id_to_ff( $form_id, $title ) {
 		}
 	}
 	else {
-		// Check if event id exist
+		// Check if event id exist.
 		$event = fac_get_fathom_event( $fac_ff_event_id );
 		if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
 			$new_event_id = fac_add_new_fathom_event( $title );
@@ -517,6 +517,93 @@ function fac_update_event_id_to_ff( $form_id, $title ) {
 			$body_name   = isset( $body['name'] ) ? $body['name'] : '';
 			if ( $body_object === 'event' && $body_name !== $title ) {
 				fac_update_fathom_event( $fac_ff_event_id, $title ); // Update Fathom event with the current title.
+			}
+		}
+	}
+}
+
+/**
+ * Add/update event id to NinjaForm.
+ *
+ * @param int $form_id The form id.
+ * @param string $title The form title.
+ */
+function fac_update_event_id_to_nj( $form_id, $title = '' ) {
+	if ( class_exists( 'Ninja_Forms' ) ) {
+		$form       = Ninja_Forms()->form( $form_id )->get();
+		$f_settings = $form->get_settings();
+		$event_id   = '';
+		if ( is_array( $f_settings ) ) {
+			$title    = $f_settings['title'];
+			$event_id = isset( $f_settings['fathom_analytics'] ) ? $f_settings['fathom_analytics'] : '';
+		}
+
+		if ( empty( $event_id ) ) {
+			$new_event_id = fac_add_new_fathom_event( $title );
+			if ( ! empty( $new_event_id ) ) {
+				$form->update_setting( 'fathom_analytics', $new_event_id );
+				$form->save();
+				// Update nf cache.
+				if ( class_exists( 'WPN_Helper' ) ) {
+					$form_cache = WPN_Helper::get_nf_cache( $form_id );
+					$form_data  = $form_cache;
+					if ( $form_data ) {
+						if ( isset( $form_data['settings'] ) ) {
+							$form_data['settings']['fathom_analytics'] = $new_event_id;
+						}
+					}
+					WPN_Helper::update_nf_cache( $form_id, $form_data );
+				}
+			}
+		}
+		else {
+			// Check if event id exist.
+			$event = fac_get_fathom_event( $event_id );
+			if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
+				$new_event_id = fac_add_new_fathom_event( $title );
+				if ( ! empty( $new_event_id ) ) {
+					$form->update_setting( 'fathom_analytics', $new_event_id );
+					$form->save();
+					// Update nf cache.
+					if ( class_exists( 'WPN_Helper' ) ) {
+						$form_cache = WPN_Helper::get_nf_cache( $form_id );
+						$form_data  = $form_cache;
+						if ( $form_data ) {
+							if ( isset( $form_data['settings'] ) ) {
+								$form_data['settings']['fathom_analytics'] = $new_event_id;
+							}
+						}
+						WPN_Helper::update_nf_cache( $form_id, $form_data );
+					}
+				}
+			}
+			else {
+				// Update event title if not match.
+				$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
+				$body_object = isset( $body['object'] ) ? $body['object'] : '';
+				$body_name   = isset( $body['name'] ) ? $body['name'] : '';
+				if ( $body_object === 'event' && $body_name !== $title ) {
+					fac_update_fathom_event( $event_id, $title ); // Update Fathom event with the current title.
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Check all NinjaForms forms.
+ */
+function fac_check_nj_forms() {
+	global $fac4wp_options, $wpdb;
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_NINJAFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
+		$formsTable = $wpdb->prefix . 'nf3_forms';
+		$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
+		//echo '<pre>';print_r( $firstForm );echo '</pre>';
+		if ( $fForms ) {
+			foreach ( $fForms as $form ) {
+				$form_id = $form['id'];
+				$title   = $form['title'];
+				fac_update_event_id_to_nj( $form_id, $title );
 			}
 		}
 	}
