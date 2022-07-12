@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The URL-specific functionality of the plugin.
  *
@@ -70,12 +69,15 @@ class Fathom_Analytics_Conversions_URL {
 	 */
 	public function fac_add_meta_boxes() {
 
-		add_meta_box( 'fac-meta-box', __( 'Fathom Analytics', 'fathom-analytics-conversions' ), array(
-			$this,
-			'fac_display_callback',
-		),
-            null,
-            'side' );
+		add_meta_box( 'fac-meta-box',
+			__( 'Fathom Analytics', 'fathom-analytics-conversions' ),
+			array(
+				$this,
+				'fac_display_callback',
+			),
+			null,
+			'side'
+		);
 	}
 
 	/**
