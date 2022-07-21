@@ -139,8 +139,9 @@ class Fathom_Analytics_Conversions_Admin {
 					$r_site_name = isset( $body['name'] ) ? $body['name'] : '';
 					$site_name   = get_site_url();
 					$site_name   = preg_replace( '#^https?://#i', '', $site_name );
-					if ( $_site_id !== $r_site_id || $r_site_name !== $site_name ) {
-						$result['error'] = 'ERROR: The API Key you have entered does not have access to this site.';
+					$no_w_s_name = ltrim( $site_name, 'www.' );
+					if ( $_site_id !== $r_site_id || ( $r_site_name !== $site_name && $r_site_name !== $no_w_s_name ) ) {
+						$result['error'] = __( 'ERROR: The API Key you have entered does not have access to this site.', 'fathom-analytics-conversions' );
 					}
 					else {
 						echo '<span class="fac_connected">';
