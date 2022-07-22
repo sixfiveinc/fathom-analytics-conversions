@@ -67,6 +67,9 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 			'fac_fluentform_after_save_form_settings'
 		), 10, 2 );
 
+		// Save/update form
+		add_filter( 'fluentform_form_fields_update', array( $this, 'fac_fluentform_form_fields_update' ), 10, 2 );
+
 		// Add hidden field to FF form - frontend.
 		add_action( 'fluentform_form_element_start', array( $this, 'fac_fluentform_form_element_start' ) );
 
@@ -151,7 +154,9 @@ class Fathom_Analytics_Conversions_Fluent_Form {
                                     <div class="el-input el-input--small">
                                         <input type="text" autocomplete="off" class="el-input__inner"
                                                name="fac-fform[event_id]"
-                                               value="<?php echo esc_attr( $settings['event_id'] ); ?>">
+                                               value="<?php echo esc_attr( $settings['event_id'] ); ?>" readonly>
+
+                                        <p><?php _e( 'This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.', 'fathom-analytics-conversions' ); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -216,6 +221,23 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 				fac_update_event_id_to_ff( $form_id, $title );
 			}
 		}
+	}
+
+	function fac_fluentform_form_fields_update( $formFields, $form_id ) {
+		global $fac4wp_options, $wpdb;
+		if ( $form_id && $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] ) {
+
+			$formsTable = $wpdb->prefix . 'fluentform_forms';
+			$fForm      = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$formsTable} WHERE id=%d", $form_id ), ARRAY_A );
+
+			if ( $fForm ) {
+				$title = $fForm['title'];
+				// Add/update event id.
+				fac_update_event_id_to_ff( $form_id, $title );
+			}
+		}
+
+		return $formFields;
 	}
 
 	/**
