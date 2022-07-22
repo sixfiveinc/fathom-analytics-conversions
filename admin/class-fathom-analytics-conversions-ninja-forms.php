@@ -81,6 +81,7 @@ class Fathom_Analytics_Conversions_Ninja_Forms {
 				'width' => 'full',
 				'group' => 'primary',
 				'value' => '',
+				'help'  => esc_html__( 'This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.', 'fathom-analytics-conversions' ),
 			);
 		}
 
