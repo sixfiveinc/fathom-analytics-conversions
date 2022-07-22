@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The GravityForms-specific functionality of the plugin.
  *
@@ -56,7 +55,7 @@ class Fathom_Analytics_Conversions_GravityForms {
 	}
 
 	/**
-	 * Check to add event id to new GravityForms form
+	 * Check to add event id to new GravityForms form.
 	 *
 	 * @param array $form The form meta
 	 * @param bool $is_new Returns true if this is a new form.
@@ -71,12 +70,12 @@ class Fathom_Analytics_Conversions_GravityForms {
 			//echo '<pre>';print_r( $form );echo '</pre>';
 			$settings = self::form_options( $form_id );
 
-			// add/update event id
+			// add/update event id.
 			if ( empty( $settings['event_id'] ) ) {
 				fa_add_event_id_to_gf( $form_id, $form_title );
 			}
 			else {
-				// check if event id exist
+				// check if event id exist.
 				$event = fac_get_fathom_event( $settings['event_id'] );
 				if ( $event['code'] !== 200 ) {
 					fa_add_event_id_to_gf( $form_id, $form_title );
@@ -113,7 +112,7 @@ class Fathom_Analytics_Conversions_GravityForms {
 	}
 
 	/**
-	 * Add settings tab to Gravity Forms form admin
+	 * Add settings tab to Gravity Forms form admin.
 	 *
 	 * @param array $setting_tabs The settings tabs.
 	 *
@@ -135,7 +134,7 @@ class Fathom_Analytics_Conversions_GravityForms {
 	}
 
 	/**
-	 * GravityForms custom setting page
+	 * GravityForms custom setting page.
 	 *
 	 * @since    1.0.0
 	 */
@@ -180,8 +179,9 @@ class Fathom_Analytics_Conversions_GravityForms {
                                 <span class="gform-settings-input__container">
                                     <input type="text" name="gforms-fac[event_id]"
                                            value="<?php echo esc_attr( $settings['event_id'] ); ?>"
-                                           id="gforms-fac-event-id">
+                                           id="gforms-fac-event-id" readonly>
                                 </span>
+                                <p><?php _e( 'This event id is created for you automatically, and maintained by the Fathom Analytics Conversions plugin. You can refer to it in your Fathom Analytics settings.', 'fathom-analytics-conversions' ); ?></p>
                             </div>
 
                             <input type="hidden" id="form_id" name="form_id"
@@ -234,9 +234,9 @@ class Fathom_Analytics_Conversions_GravityForms {
 	}
 
 	/**
-	 * Sets all forms to Ajax only
+	 * Sets all forms to Ajax only.
 	 *
-	 * @param array $form_args The form arguments
+	 * @param array $form_args The form arguments.
 	 *
 	 * @since 1.0.0
 	 *
