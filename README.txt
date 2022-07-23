@@ -21,6 +21,9 @@ Fathom Analytics Conversions is the no code answer for WordPress and Fathom Anal
 
 https://youtu.be/nyi7d1SMBeo
 
+= This is not an official Fathom plugin =
+This WordPress plugin "Fathom Conversions" is not part of, or associated with "Fathom Analytics" by Conva Ventures Inc.
+
 = Warning BETA API in use =
 This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
 
