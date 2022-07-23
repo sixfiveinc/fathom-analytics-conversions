@@ -19,6 +19,8 @@ The official Fathom Analytics plugin makes it easy to place the tracking code on
 
 Fathom Analytics Conversions is the no code answer for WordPress and Fathom Analytics users. You need to technical knowledge to implement events.
 
+https://youtu.be/nyi7d1SMBeo
+
 = Warning BETA API in use =
 This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
 
@@ -39,7 +41,7 @@ This plugin:
 
 = Demo =
 
-You can find more information about the plugin, and see a demo and installation instructions on the [https://fathomconversions.com](Fathom Conversions website)
+You can find more information about the plugin, and see a demo and installation instructions on the [Fathom Conversions website](https://fathomconversions.com)
 
 = Requirements =
 
@@ -53,7 +55,10 @@ And a supported WordPress plugin listed below installed and active.
 = Currently supported plugins =
 
 *   [Contact Form 7](https://wordpress.org/plugins/contact-form-7/)
-*   [WPForms](https://wordpress.org/plugins/wpforms-lite/) & [WPForms Pro](https://wpforms.com)
+*   [WPForms](https://wordpress.org/plugins/wpforms-lite/) & [WPForms Pro](https://wpforms.com/)
+*   [Gravity Forms](https://www.gravityforms.com/)
+*   [Ninja Forms](https://wordpress.org/plugins/ninja-forms/) & [Ninja Forms Pro](https://ninjaforms.com/)
+*   [Fluent Forms](https://wordpress.org/plugins/fluentform/) & [Fluent Forms Pro](https://fluentforms.com/)
 
 == Installation ==
 
@@ -116,6 +121,15 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.0.4 =
+* Added support for Gravity Forms
+* Added support for Fluent Forms
+* Added support for Ninja Forms
+* Added support for URL based conversions
+
+= 1.0.3 =
+* Added support for WP Forms Free & Pro
 
 = 1.0.1 =
 * Added deletion of plugin settings on plugin delete
