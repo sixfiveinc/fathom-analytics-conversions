@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.0
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,26 +13,33 @@ Easily add conversions in WordPress plugins to Fathom Analytics
 
 == Description ==
 
-This plugin makes it easy to add conversions from WordPress forms into [Fathom Analytics](https://usefathom.com) with no code.
+This Fathom Analytics *partner plugin* makes it easy to enable WordPress forms and pages as [Fathom Analytics](https://usefathom.com) Events with *no code*.
 
-The official Fathom Analytics plugin makes it easy to place the tracking code on the page, it does not add the ability to create events/conversions easily.
+👉 Go to the official [Fathom Analytics plugin](https://wordpress.org/plugins/fathom-analytics/)
 
-Fathom Analytics Conversions is the no code answer for WordPress and Fathom Analytics users. You need to technical knowledge to implement events.
 
+= What does this companion plugin do? =
+
+Makes it easy to track user actions such as form submissions and landing page visits as events in your Fathom Analytics account.
+
+Best of all *no technical knowledge is required* to implement events on your site.
+
+= Key Features =
+
+* No code event tracking for marketers and website owners
+* Common form plugins supported
+* Make any page or post an Event
+* Synchronized event names between website and analytics
+
+
+= Watch the setup walkthrough =
 https://youtu.be/nyi7d1SMBeo
 
 = This is not an official Fathom plugin =
 This WordPress plugin "Fathom Conversions" is not part of, or associated with "Fathom Analytics" by Conva Ventures Inc.
 
-= Warning BETA API in use =
+= ⚠️ Warning BETA API in use =
 This plugin uses the Beta Fathom Analytics API, which is still in early access, and subject to changes in the future, this plugin could stop working without warning if updates occur.
-
-= Key Features =
-
-* Automated backend creation of events for your forms
-* Code added to the form on submit to add the conversion in Fathom Analytics
-* Events named by your form name
-* Automatic update of the event Name if you change your form name
 
 = Privacy Notices =
 
@@ -48,10 +55,7 @@ You can find more information about the plugin, and see a demo and installation 
 
 = Requirements =
 
-For this to work you will need either:
-
-1. You need a paid Fathom Analytics account [$10 off your first month with our referral code](https://usefathom.com/ref/LBSJIU) - by using this you will support our development efforts and keep this plugin free.
-1. Sign up for a [7 day free trial today](https://app.usefathom.com/register). Both options are $14/month thereafter on the basic plan.
+For this to work you will need a paid [Fathom Analytics account](https://usefathom.com/ref/LBSJIU) (get $10 off your first month with this link)
 
 And a supported WordPress plugin listed below installed and active.
 
@@ -71,16 +75,22 @@ Easy method:
 
 1. From the WordPress dashboard Plugins > Add New search for 'Fathom Analytics' and click install then Activate
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Follow the instructions below to set up your API Key
+1. Follow the instructions on the settings page to set up your API Key
 
 Manual method:
 
 1. Download the zip file from this page and unzip
 1. Upload the entire `fathom-analytics-conversions` folder to the `/wp-content/plugins/` directory using your favourite FTP tool
-1. Follow the instructions below to set up your API Key
+1. Follow the instructions on the settings page to set up your API Key
 
 
 == Frequently Asked Questions ==
+
+= Is this an official plugin? =
+
+No.
+
+The team at Fathom Analytics have been supportive of the production of this plugin, but it is not an official Fathom Analytics plugin.
 
 = Why did you build this plugin? =
 
@@ -88,7 +98,13 @@ In January 2022 [Google Analytics was deemed illegal in the EU](https://www.sixf
 
 In March 2022 [Google announced sunset July 1, 2023 and data deletion (+6 months) of Google Analytics Universal](https://www.searchenginejournal.com/google-sunsetting-universal-analytics-in-2023/442168/), with no data being kept essentially forcing users on to Google Analytics v4. This only complicates matters for the billions of sites using Google Analytics, and does not deal with the privacy requirements of EU users.
 
-With the push to find another solution, we started with Fathom Analytics, and saw that it required plenty of code to integrate forms and create events and conversions. Hence, with their support, this plugin attempts to make it easy for the non-coders to implement events with  and Fathom Analytics.
+Looking for an analytics tool to replace Google Analytics, we found Fathom and loved it for it's simplicity and GDPR compliance. The one blocker however, was adding events was a code reliant task, something we badly wanted to be easier. The official plugin makes it easy to place the tracking code on the page, it does not add the ability to create events/conversions easily.
+
+So to make this easier for ourselves, marketers, website owners and non-coders - we built this plugin to have the ability to easily track these user events with only a few clicks. Fathom Analytics Conversions is the **no code** answer for WordPress and Fathom Analytics users.
+
+= Who are you? =
+
+We are the team from [SixFive](https://www.sixfive.com.au) and we build, host and care for our clients websites built on WordPress. We have more than 20 years experience with hundreds of clients globally.
 
 = How do I get started? =
 
@@ -99,13 +115,13 @@ With the push to find another solution, we started with Fathom Analytics, and sa
 1. Open the [Fathom Analytics API Settings](https://app.usefathom.com/#/settings/api) page
 1. Create a new token, using a sensible name
 1. Create as a 'Site-specific key'
-1. Set Access to 'Manage' (this is because we need to create Events, not just track against them
+1. Set Access to 'Manage' (this is because we need to create Events, not just track against them)
 1. Click Generate API Key
 1. Copy the API Key and paste into Settings > Fathom Analytics Conversions
 1. Click 'Save Changes'
 1. Check the boxes for the installed plugins you want to track data from
 
-The plugin will then go through these plugins and create the matching events. As soon as your form has a submission it will be recorded in your Fathom Analytics dashboard.
+The plugin will then go through all our supported plugins and create the matching events. As soon as your form has a submission it will be recorded in your Fathom Analytics dashboard.
 
 
 = I have a feature request = 
@@ -125,7 +141,10 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 
 == Changelog ==
 
-= 1.0.4 =
+= 1.0.6 =
+* Changed URL to the API Page to meet the new usefathom.com URL
+
+= 1.0.5 =
 * Added support for Gravity Forms
 * Added support for Fluent Forms
 * Added support for Ninja Forms
