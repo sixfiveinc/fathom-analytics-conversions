@@ -392,7 +392,7 @@ class Fathom_Analytics_Conversions_Admin {
 			FAC4WP_ADMIN_GROUP_GENERAL,
 			array(
 				'label_for'   => FAC4WP_ADMIN_GROUP_API_KEY,
-				'description' => __( 'Enter your Fathom API key here.', 'fathom-analytics-conversions' ) . ' Get API key <a href="https://app.usefathom.com/#/settings/api" target="_blank">here</a>.',
+				'description' => __( 'Enter your Fathom API key here.', 'fathom-analytics-conversions' ) . ' Get API key <a href="https://app.usefathom.com/api" target="_blank">here</a>.',
 			)
 		);
 
