@@ -141,6 +141,9 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 
 == Changelog ==
 
+= 1.0.7 =
+* Removed check of site name
+
 = 1.0.6 =
 * Changed URL to the API Page to meet the new usefathom.com URL
 
