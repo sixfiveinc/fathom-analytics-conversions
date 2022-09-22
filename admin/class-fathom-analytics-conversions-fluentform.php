@@ -268,7 +268,7 @@ class Fathom_Analytics_Conversions_Fluent_Form {
 	 */
 	public function enqueue_scripts() {
 		global $fac4wp_options, $fac4wp_plugin_url;
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] && $fac4wp_options['fac_fathom_analytics_is_active'] ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_FLUENTFORMS, true );
