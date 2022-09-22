@@ -16,6 +16,7 @@ $fac4wp_options = array();
 
 $fac4wp_default_options = array(
 	FAC4WP_OPTION_API_KEY_CODE           => '',
+	FAC_OPTION_INSTALLED_TC              => '',
 	FAC4WP_OPTION_INTEGRATE_WPCF7        => false,
 	FAC4WP_OPTION_INTEGRATE_WPFORMS      => false,
 	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => false,
@@ -56,10 +57,13 @@ function fac_fathom_get_admin_tracking() {
 
 // get Site ID from Fathom Analytics.
 function fac_fathom_get_site_id() {
-	//if(!defined('FATHOM_SITE_ID_OPTION_NAME')) define('FATHOM_SITE_ID_OPTION_NAME', 'fathom_site_id');
-
-	//return get_option(FATHOM_SITE_ID_OPTION_NAME, '');
-	return get_option( 'fathom_site_id', '' );
+	$fac_options = (array) get_option( FAC4WP_OPTIONS );
+	if ( ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) {
+		return $fac_options[ FAC_OPTION_SITE_ID ];
+	}
+	else { // If not 'installed tracking code elsewhere', get site id from FA plugin.
+		return get_option( 'fathom_site_id', '' );
+	}
 }
 
 // is Fathom Analytics active.
