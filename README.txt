@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.0
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -140,6 +140,9 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.0.8 =
+* Allowing custom fathom code option, and removal of reliance on official Fathom Plugin
 
 = 1.0.7 =
 * Removed check of site name

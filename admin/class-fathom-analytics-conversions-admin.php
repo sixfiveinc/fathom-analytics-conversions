@@ -73,7 +73,7 @@ class Fathom_Analytics_Conversions_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fathom-analytics-conversions-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fathom-analytics-conversions-admin.css', array(), $this->version );
 
 	}
 
@@ -96,7 +96,7 @@ class Fathom_Analytics_Conversions_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-admin.js', array( 'jquery' ), '1.2', false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-admin.js', array( 'jquery' ), '1.0.7', false );
 
 	}
 
@@ -120,7 +120,8 @@ class Fathom_Analytics_Conversions_Admin {
 	// admin output field
 	public function fac4wp_admin_output_field( $args ) {
 		global $fac4wp_options;
-		$_site_id = $fac4wp_options[ FAC_OPTION_SITE_ID ];
+		$_site_id     = $fac4wp_options[ FAC_OPTION_SITE_ID ];
+		$installed_tc = $fac4wp_options[ FAC_OPTION_INSTALLED_TC ];
 
 		switch ( $args['label_for'] ) {
 			case FAC4WP_ADMIN_GROUP_API_KEY:
@@ -130,11 +131,11 @@ class Fathom_Analytics_Conversions_Admin {
 
 				echo '<input type="text" id="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']' ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']' ) . '" value="' . esc_attr( $_api_key ) . '" ' . esc_html( $_input_readonly ) . ' class="regular-text" />';
 				$result = fac_api_key();
-				//echo '<pre>';print_r($result);echo '</pre>';
+				//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
 				if ( isset( $result['code'] ) && $result['code'] === 200 ) {
 					$body = isset( $result['body'] ) ? json_decode( $result['body'], true ) : array();
 					//echo '<pre>';print_r($body);echo '</pre>';
-					$r_site_id   = isset( $body['id'] ) ? $body['id'] : '';
+					$r_site_id = isset( $body['id'] ) ? $body['id'] : '';
 					/*$r_site_name = isset( $body['name'] ) ? $body['name'] : '';
 					$site_name   = get_site_url();
 					$site_name   = preg_replace( '#^https?://#i', '', $site_name );
@@ -178,9 +179,22 @@ class Fathom_Analytics_Conversions_Admin {
 
 			case FAC4WP_ADMIN_GROUP_SITE_ID:
 			{
-				$_input_readonly = ' readonly="readonly"';
+				if ( empty( $installed_tc ) ) {
+					$_input_readonly = ' readonly="readonly"';
+				}
+				else {
+					$_input_readonly = '';
+				}
 
-				echo '<input type="text" id="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']' ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']' ) . '" value="' . esc_attr( $_site_id ) . '" ' . esc_html( $_input_readonly ) . ' class="regular-text" /><br />' . esc_html( $args['description'] );
+				echo '<input type="text" id="' . esc_attr( FAC4WP_OPTIONS . '_' . FAC_OPTION_SITE_ID ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC_OPTION_SITE_ID . ']' ) . '" value="' . esc_attr( $_site_id ) . '" ' . esc_html( $_input_readonly ) . ' class="regular-text" />';
+
+				echo '<label for="' . esc_attr( FAC4WP_OPTIONS . '_' . FAC_OPTION_INSTALLED_TC ) . '" class="installed_tc_elsewhere">';
+				echo '<input type="checkbox" id="' . esc_attr( FAC4WP_OPTIONS . '_' . FAC_OPTION_INSTALLED_TC ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC_OPTION_INSTALLED_TC . ']' ) . '"  value="1"  ' . checked( 1, $installed_tc, false ) . ' >';
+				echo '<span>';
+				echo esc_html( __( 'I installed my tracking code elsewhere.', 'fathom-analytics-conversions' ) );
+				echo '</span></label>';
+
+				echo '<br />' . esc_html( $args['description'] );
 				if ( empty( $_site_id ) ) {
 					echo '<p class="fac_error">' .
 					     sprintf(
@@ -300,9 +314,13 @@ class Fathom_Analytics_Conversions_Admin {
 
 			// site ID
 			if ( $optionname === FAC_OPTION_SITE_ID ) {
-				//$output[ $optionname ] = '';
-				unset( $output[ $optionname ] );
-				// integrations
+
+				if ( empty( $output[ FAC_OPTION_INSTALLED_TC ] ) ) {
+					unset( $output[ $optionname ] );
+				}
+				else {
+					$output[ $optionname ] = $newoptionvalue;
+				}
 			}
             elseif ( substr( $optionname, 0, 10 ) == 'integrate-' ) {
 				$output[ $optionname ] = (bool) $newoptionvalue;
@@ -472,6 +490,8 @@ class Fathom_Analytics_Conversions_Admin {
 	}
 
 	public function fac_admin_notices() {
+		$fac4wp_options = fac4wp_reload_options();
+
 		if ( ! file_exists( WP_PLUGIN_DIR . '/fathom-analytics/fathom-analytics.php' ) ) {
 
 			$notice = '<div class="error" id="messages"><p>';
@@ -507,7 +527,7 @@ class Fathom_Analytics_Conversions_Admin {
 			);
 
 		}
-        elseif ( ! is_plugin_active( 'fathom-analytics/fathom-analytics.php' ) ) {
+        elseif ( ! is_plugin_active( 'fathom-analytics/fathom-analytics.php' ) && empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) {
 			$notice = '<div class="error" id="messages"><p>';
 			$notice .= wp_kses( __( '<b>Please activate Fathom Analytics</b> below for the <b>Fathom Analytics Conversions</b> to work.', 'fathom-analytics-conversions' ),
 				array(

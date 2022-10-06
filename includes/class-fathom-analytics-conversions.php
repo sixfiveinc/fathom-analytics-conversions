@@ -71,13 +71,14 @@ class Fathom_Analytics_Conversions {
 			$this->version = FATHOM_ANALYTICS_CONVERSIONS_VERSION;
 		}
 		else {
-			$this->version = '1.0.0';
+			$this->version = '1.0.7';
 		}
 		$this->plugin_name = 'fathom-analytics-conversions';
 
 		define( 'FAC4WP_OPTIONS', 'fac4wp-options' );
 		define( 'FAC4WP_OPTION_API_KEY_CODE', 'fac-api-key-code' );
 		define( 'FAC_OPTION_SITE_ID', 'fac-site-id' );
+		define( 'FAC_OPTION_INSTALLED_TC', 'installed-tracking-code-elsewhere' );
 		define( 'FAC_FATHOM_TRACK_ADMIN', 'fac-fathom-track-admin' );
 
 		define( 'FAC4WP_OPTION_INTEGRATE_WPCF7', 'integrate-wpcf7' );
