@@ -86,6 +86,7 @@ class Fathom_Analytics_Conversions {
 		define( 'FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS', 'integrate-gravityforms' );
 		define( 'FAC4WP_OPTION_INTEGRATE_FLUENTFORMS', 'integrate-fluentforms' );
 		define( 'FAC4WP_OPTION_INTEGRATE_NINJAFORMS', 'integrate-ninjaforms' );
+		define( 'FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE', 'integrate-woocommerce' );
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -166,6 +167,12 @@ class Fathom_Analytics_Conversions {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-ninja-forms.php';
 
 		/**
+		 * The class responsible for defining all actions that occur in the woocommerce-specific functionality
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fathom-analytics-conversions-woocommerce.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -213,6 +220,7 @@ class Fathom_Analytics_Conversions {
 		new Fathom_Analytics_Conversions_URL( $this->get_plugin_name(), $this->get_version() );
 		new Fathom_Analytics_Conversions_Fluent_Form( $this->get_plugin_name(), $this->get_version() );
 		new Fathom_Analytics_Conversions_Ninja_Forms( $this->get_plugin_name(), $this->get_version() );
+		new Fathom_Analytics_Conversions_Woocommerce( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

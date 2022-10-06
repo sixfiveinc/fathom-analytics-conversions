@@ -3,7 +3,7 @@
  * The admin-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.0
+ * @since      1.0.9
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/admin
@@ -131,7 +131,7 @@ class Fathom_Analytics_Conversions_Admin {
 
 				echo '<input type="text" id="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']' ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . FAC4WP_OPTION_API_KEY_CODE . ']' ) . '" value="' . esc_attr( $_api_key ) . '" ' . esc_html( $_input_readonly ) . ' class="regular-text" />';
 				$result = fac_api_key();
-				//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
+				//echo '<pre>';print_r( $fac4wp_options );echo '</pre>';
 				if ( isset( $result['code'] ) && $result['code'] === 200 ) {
 					$body = isset( $result['body'] ) ? json_decode( $result['body'], true ) : array();
 					//echo '<pre>';print_r($body);echo '</pre>';
@@ -387,6 +387,12 @@ class Fathom_Analytics_Conversions_Admin {
 				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'ninja-forms/ninja-forms.php',
+			),
+			FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => array(
+				'label'           => __( 'Woocommerce', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add conversation a successful order.', 'fathom-analytics-conversions' ),
+				'phase'           => FAC4WP_PHASE_STABLE,
+				'plugin_to_check' => 'woocommerce/woocommerce.php',
 			),
 		);
 		global $fac4wp_integrate_field_texts;
