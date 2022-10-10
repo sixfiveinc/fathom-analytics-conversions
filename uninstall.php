@@ -19,7 +19,7 @@
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
  * @link              https://www.fathomconversions.com
- * @since      1.0
+ * @since      1.0.9
  *
  * @package    Fathom_Analytics_Conversions
  */
@@ -32,6 +32,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 global $wpdb;
 
 delete_option( 'fac4wp-options' );
+delete_option( 'fac_options' );
 
 $results = $wpdb->query(
 	$wpdb->prepare(

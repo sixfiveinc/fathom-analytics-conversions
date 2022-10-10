@@ -3,8 +3,8 @@ Contributors: dloxton, khanhvo
 Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
-Tested up to: 6.0
-Stable tag: 1.0.8
+Tested up to: 6.2
+Stable tag: 1.0.9
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,7 @@ And a supported WordPress plugin listed below installed and active.
 *   [Gravity Forms](https://www.gravityforms.com/)
 *   [Ninja Forms](https://wordpress.org/plugins/ninja-forms/) & [Ninja Forms Pro](https://ninjaforms.com/)
 *   [Fluent Forms](https://wordpress.org/plugins/fluentform/) & [Fluent Forms Pro](https://fluentforms.com/)
+*   [WooCommmerce](https://woocommerce.com/)
 
 == Installation ==
 
@@ -140,6 +141,9 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.0.9 =
+* WooCommerce support, adding order total to the event
 
 = 1.0.8 =
 * Allowing custom fathom code option, and removal of reliance on official Fathom Plugin

@@ -5,7 +5,7 @@
  * General core functions available on both the front-end and admin.
  *
  * @package Fathom_Analytics_Conversions\Functions
- * @version 1.0
+ * @version 1.0.9
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -22,6 +22,7 @@ $fac4wp_default_options = array(
 	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => false,
 	FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => false,
 	FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => false,
+	FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => false,
 );
 
 function fac4wp_reload_options() {
