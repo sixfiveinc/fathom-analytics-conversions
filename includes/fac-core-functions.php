@@ -285,7 +285,7 @@ function fac_is_json( $string ) {
 function fac_check_cf7_forms() {
 	global $fac4wp_options;
 	//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 		$args      = [
 			'post_type'   => 'wpcf7_contact_form',
 			'post_status' => 'publish',
@@ -404,7 +404,7 @@ function fa_add_event_id_to_gf( $form_id = 0, $title = '' ) {
 function fac_check_wpforms_forms() {
 	global $fac4wp_options;
 	//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 		$args  = [
 			'post_type'   => 'wpforms',
 			'post_status' => 'publish',
@@ -446,7 +446,7 @@ function fac_check_wpforms_forms() {
 function fac_check_gf_forms() {
 	global $fac4wp_options;
 	//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) && class_exists( 'GFAPI' ) ) {
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) && class_exists( 'GFAPI' ) ) {
 		$gf_forms = GFAPI::get_forms( true, false ); // get all gforms.
 
 		if ( $gf_forms ) {
@@ -471,7 +471,7 @@ function fac_check_gf_forms() {
  */
 function fac_check_ff_forms() {
 	global $fac4wp_options, $wpdb;
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_FLUENTFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 		$formsTable = $wpdb->prefix . 'fluentform_forms';
 		$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
 		//echo '<pre>';print_r( $firstForm );echo '</pre>';
@@ -600,7 +600,7 @@ function fac_update_event_id_to_nj( $form_id, $title = '' ) {
  */
 function fac_check_nj_forms() {
 	global $fac4wp_options, $wpdb;
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_NINJAFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_NINJAFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 		$formsTable = $wpdb->prefix . 'nf3_forms';
 		$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
 		//echo '<pre>';print_r( $firstForm );echo '</pre>';

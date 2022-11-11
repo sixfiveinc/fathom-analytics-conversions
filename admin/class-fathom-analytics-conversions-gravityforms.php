@@ -248,7 +248,7 @@ class Fathom_Analytics_Conversions_GravityForms {
 			return $form_args;
 		}
 
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			$form_args['ajax'] = true;
 		}
 

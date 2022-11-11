@@ -99,7 +99,7 @@ class Fathom_Analytics_Conversions_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-public.js', array( 'jquery' ), $this->version, false );
 
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPCF7, true );
@@ -107,7 +107,7 @@ class Fathom_Analytics_Conversions_Public {
 			}
 		}
 
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPFORMS, true );
@@ -115,7 +115,7 @@ class Fathom_Analytics_Conversions_Public {
 			}
 		}
 
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 
 				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS, true );

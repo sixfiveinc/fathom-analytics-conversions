@@ -76,7 +76,7 @@ class Fathom_Analytics_Conversions_Woocommerce {
 	 */
 	public function fac_woo_footer_script() {
 		global $fac4wp_options, $gtm4wp_is_woocommerce3;
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
 			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
 				$woo = WC();
 				if ( is_order_received_page() ) {
