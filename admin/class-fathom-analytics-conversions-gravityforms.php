@@ -52,6 +52,9 @@ class Fathom_Analytics_Conversions_GravityForms {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
+		// Add js to track the form submission.
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 	}
 
 	/**
@@ -253,6 +256,38 @@ class Fathom_Analytics_Conversions_GravityForms {
 		}
 
 		return $form_args;
+	}
+
+	/**
+	 * Register the JavaScript for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_scripts() {
+		global $fac4wp_options, $fac4wp_plugin_url;
+
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
+
+				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS, true );
+				// wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js/fac-gforms-tracker.js' ), $in_footer );
+				wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
+				$gforms_data = array();
+				if ( class_exists( 'GFAPI' ) ) {
+					$gf_forms = GFAPI::get_forms( true, false ); // get all gforms.
+					if ( $gf_forms ) {
+						foreach ( $gf_forms as $form ) {
+							$form_id                 = $form['id'];
+							$fac_gf                  = get_option( 'gforms_fac_' . $form_id, array() );
+							$fac_gf_event_id         = is_array( $fac_gf ) && isset( $fac_gf['event_id'] ) ? $fac_gf['event_id'] : '';
+							$gforms_data[ $form_id ] = $fac_gf_event_id;
+						}
+					}
+				}
+				wp_localize_script( 'fac-gforms-tracker', 'gforms_data', $gforms_data );
+			}
+		}
+
 	}
 
 }

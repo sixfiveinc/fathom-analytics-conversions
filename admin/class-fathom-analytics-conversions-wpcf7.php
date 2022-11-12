@@ -52,6 +52,9 @@ class Fathom_Analytics_Conversions_WPCF7 {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		// Add js to track the form submission.
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 	}
 
 	/**
@@ -153,6 +156,23 @@ class Fathom_Analytics_Conversions_WPCF7 {
 			else fac_update_fathom_event($fac_cf7_event_id, $title);
 		}
 
+	}
+
+	/**
+	 * Register the JavaScript for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_scripts() {
+		global $fac4wp_options, $fac4wp_plugin_url;
+
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
+
+				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPCF7, true );
+				wp_enqueue_script( 'fac-contact-form-7-tracker', $fac4wp_plugin_url . 'public/js/fac-contact-form-7-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
+			}
+		}
 	}
 
 }

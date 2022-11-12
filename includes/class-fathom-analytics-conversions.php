@@ -264,7 +264,7 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_filter( 'gform_form_settings_page_fac-gform', $plugin_gf, 'fac_gform_render_settings_page' );
 		// Initialize whether Ajax is on or off.
 		$this->loader->add_filter( 'gform_form_args', $plugin_gf, 'fac_gform_ajax_only', 15 );
-		// Check to add event id to new WPForms form.
+		// Check to add event id to new Gravity Forms form.
 		$this->loader->add_action( 'gform_after_save_form', $plugin_gf, 'fac_gform_after_save_form', 10, 2 );
 
 	}
