@@ -178,12 +178,21 @@ class Fathom_Analytics_Conversions {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fathom-analytics-conversions-public.php';
 
+        /**
+         * The class responsible for defining all actions that occur in the tracking functionality
+         * side of the site.
+         */
+        //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fathom-analytics-conversions-appsero.php';
+		//new Fathom_Analytics_Conversions_Appsero();
+
 		/**
 		 * The core functions available on both the front-end and admin
 		 */
 		require_once FAC4WP_PATH . '/includes/fac-core-functions.php';
 
 		$this->loader = new Fathom_Analytics_Conversions_Loader();
+
+
 
 	}
 
