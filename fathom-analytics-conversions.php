@@ -42,6 +42,31 @@ global $fac4wp_plugin_url, $fac4wp_plugin_basename;
 $fac4wp_plugin_url      = plugin_dir_url( __FILE__ );
 $fac4wp_plugin_basename = plugin_basename( __FILE__ );
 
+// Load the autoloader.
+require __DIR__ . '/includes/Autoloader.php';
+
+Autoloader::init();
+
+/**
+ * Initialize the plugin tracker
+ *
+ * @return void
+ */
+function appsero_init_tracker_fathom_analytics_conversions() {
+
+	if ( ! class_exists( 'Appsero\Client' ) ) {
+		require_once __DIR__ . '/appsero/src/Client.php';
+	}
+
+	$client = new Appsero\Client( 'df35d7c2-8939-4676-ba5d-395f499225c4', 'Fathom Analytics Conversions', __FILE__ );
+
+	// Active insights
+	$client->insights()->init();
+
+}
+
+appsero_init_tracker_fathom_analytics_conversions();
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-fathom-analytics-conversions-activator.php

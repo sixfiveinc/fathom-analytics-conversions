@@ -97,45 +97,10 @@ class Fathom_Analytics_Conversions_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-public.js', array( 'jquery' ), $this->version, false );
-
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPCF7 ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
-			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
-
-				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPCF7, true );
-				wp_enqueue_script( 'fac-contact-form-7-tracker', $fac4wp_plugin_url . 'public/js/fac-contact-form-7-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
-			}
-		}
-
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_WPFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
-			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
-
-				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_WPFORMS, true );
-				wp_enqueue_script( 'fac-wpforms-tracker', $fac4wp_plugin_url . 'public/js/fac-wpforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
-			}
-		}
-
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
-			if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
-
-				$in_footer = apply_filters( 'fac4wp_' . FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS, true );
-				// wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), filemtime( plugin_dir_path( __FILE__ ) . 'js/fac-gforms-tracker.js' ), $in_footer );
-				wp_enqueue_script( 'fac-gforms-tracker', $fac4wp_plugin_url . 'public/js/fac-gforms-tracker.js', array(), FATHOM_ANALYTICS_CONVERSIONS_VERSION, $in_footer );
-				$gforms_data = array();
-				if ( class_exists( 'GFAPI' ) ) {
-					$gf_forms = GFAPI::get_forms( true, false ); // get all gforms.
-					if ( $gf_forms ) {
-						foreach ( $gf_forms as $form ) {
-							$form_id                 = $form['id'];
-							$fac_gf                  = get_option( 'gforms_fac_' . $form_id, array() );
-							$fac_gf_event_id         = is_array( $fac_gf ) && isset( $fac_gf['event_id'] ) ? $fac_gf['event_id'] : '';
-							$gforms_data[ $form_id ] = $fac_gf_event_id;
-						}
-					}
-				}
-				wp_localize_script( 'fac-gforms-tracker', 'gforms_data', $gforms_data );
-			}
-		}
+		$in_footer = apply_filters( 'fac_public_js', true );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fathom-analytics-conversions-public.js', array( 'jquery' ), '1.1', $in_footer );
+		$fac_data = apply_filters( 'fac_localize_script_data', array() );
+		wp_localize_script( $this->plugin_name, 'fac_data', $fac_data );
 	}
 
 	/**

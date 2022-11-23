@@ -178,12 +178,21 @@ class Fathom_Analytics_Conversions {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fathom-analytics-conversions-public.php';
 
+        /**
+         * The class responsible for defining all actions that occur in the tracking functionality
+         * side of the site.
+         */
+        //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fathom-analytics-conversions-appsero.php';
+		//new Fathom_Analytics_Conversions_Appsero();
+
 		/**
 		 * The core functions available on both the front-end and admin
 		 */
 		require_once FAC4WP_PATH . '/includes/fac-core-functions.php';
 
 		$this->loader = new Fathom_Analytics_Conversions_Loader();
+
+
 
 	}
 
@@ -264,7 +273,7 @@ class Fathom_Analytics_Conversions {
 		$this->loader->add_filter( 'gform_form_settings_page_fac-gform', $plugin_gf, 'fac_gform_render_settings_page' );
 		// Initialize whether Ajax is on or off.
 		$this->loader->add_filter( 'gform_form_args', $plugin_gf, 'fac_gform_ajax_only', 15 );
-		// Check to add event id to new WPForms form.
+		// Check to add event id to new Gravity Forms form.
 		$this->loader->add_action( 'gform_after_save_form', $plugin_gf, 'fac_gform_after_save_form', 10, 2 );
 
 	}

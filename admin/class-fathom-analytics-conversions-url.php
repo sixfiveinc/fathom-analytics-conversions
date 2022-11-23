@@ -58,7 +58,8 @@ class Fathom_Analytics_Conversions_URL {
 		add_action( 'save_post', array( $this, 'fac_save_post' ) );
 
 		// Render JS.
-		add_action( 'wp_footer', array( $this, 'fac_url_wp_footer' ), 100 );
+		//add_action( 'wp_footer', array( $this, 'fac_url_wp_footer' ), 100 );
+		add_filter( 'fac_localize_script_data', array( $this, 'fac_localize_script_data_url' ) );
 
 	}
 
@@ -120,7 +121,7 @@ class Fathom_Analytics_Conversions_URL {
         <script>
             jQuery(document).ready(function ($) {
                 $('#link_to_fathom_event').on('change', function () {
-                    if(this.checked) $('.link_to_fathom_event_name_field').show(100);
+                    if (this.checked) $('.link_to_fathom_event_name_field').show(100);
                     else $('.link_to_fathom_event_name_field').hide(100);
                 });
             });
@@ -159,8 +160,7 @@ class Fathom_Analytics_Conversions_URL {
 			if ( ! empty( $link_to_fathom_event_name ) ) {
 				update_post_meta( $post_id, '_fac_url_event_name', $link_to_fathom_event_name );
 				$title = $link_to_fathom_event_name;
-			}
-			else {
+			} else {
 				$title = get_the_title( $post_id ) . ' - ' . $post_id;
 			}
 			// get event id.
@@ -170,8 +170,7 @@ class Fathom_Analytics_Conversions_URL {
 				if ( ! empty( $new_event_id ) ) {
 					update_post_meta( $post_id, '_fac_page_event_id', $new_event_id );
 				}
-			}
-			else {
+			} else {
 				// Check if event id exist.
 				$event = fac_get_fathom_event( $event_id );
 				if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
@@ -179,8 +178,7 @@ class Fathom_Analytics_Conversions_URL {
 					if ( ! empty( $new_event_id ) ) {
 						update_post_meta( $post_id, '_fac_page_event_id', $new_event_id );
 					}
-				}
-				else {
+				} else {
 					// Update event title if not match.
 					$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
 					$body_object = isset( $body['object'] ) ? $body['object'] : '';
@@ -190,15 +188,14 @@ class Fathom_Analytics_Conversions_URL {
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			delete_post_meta( $post_id, '_fac_url_page' );
 			delete_post_meta( $post_id, '_fac_url_event_name' );
 		}
 	}
 
 	/**
-	 * Add settings tab to Gravity Forms form admin.
+	 * Add tracking code.
 	 *
 	 * @since    1.0.0
 	 */
@@ -214,6 +211,21 @@ class Fathom_Analytics_Conversions_URL {
 				<?php
 			}
 		}
+	}
+
+    // Send page event id to script.
+	public function fac_localize_script_data_url( $data ) {
+		global $post;
+		if ( is_singular() ) {
+			$post_id       = $post->ID;
+			$track_page    = get_post_meta( $post_id, '_fac_url_page', true );
+			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', true );
+			if ( $track_page && $page_event_id ) {
+				$data['page_event_id'] = $page_event_id;
+			}
+		}
+
+		return $data;
 	}
 
 }
