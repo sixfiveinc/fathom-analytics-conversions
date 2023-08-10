@@ -350,13 +350,13 @@ class Fathom_Analytics_Conversions_Admin {
 		$GLOBALS['fac4wp_integrate_field_texts'] = [
 			FAC4WP_OPTION_INTEGRATE_WPCF7        => [
 				'label'           => __( 'Contact Form 7', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'contact-form-7/wp-contact-form-7.php',
 			],
 			FAC4WP_OPTION_INTEGRATE_WPFORMS      => [
 				'label'           => __( 'WPForms', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => [
 					'wpforms/wpforms.php',
@@ -365,13 +365,13 @@ class Fathom_Analytics_Conversions_Admin {
 			],
 			FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => [
 				'label'           => __( 'Gravity Forms', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'gravityforms/gravityforms.php',
 			],
 			FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => [
 				'label'           => __( 'Fluent Form', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => [
 					'fluentform/fluentform.php',
@@ -380,32 +380,32 @@ class Fathom_Analytics_Conversions_Admin {
 			],
 			FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => [
 				'label'           => __( 'Ninja Forms', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'ninja-forms/ninja-forms.php',
 			],
 			FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => [
 				'label'           => __( 'Woocommerce', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add conversation a successful order.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful order.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'woocommerce/woocommerce.php',
 			],
 
 			'integrate-wp-login'        => [
 				'label'       => __( 'Login', 'fathom-analytics-conversions' ),
-				'description' => __( 'Check this to add conversation a login submission.', 'fathom-analytics-conversions' ),
+				'description' => __( 'Check this to add a conversion from a login to your site.', 'fathom-analytics-conversions' ),
 				'phase'       => FAC4WP_PHASE_STABLE,
 				//'plugin_to_check' => 'woocommerce/woocommerce.php',
 			],
 			'integrate-wp-registration' => [
 				'label'       => __( 'Registration', 'fathom-analytics-conversions' ),
-				'description' => __( 'Check this to add conversation a registration submission.', 'fathom-analytics-conversions' ),
+				'description' => __( 'Check this to add a conversion from a registration on your site.', 'fathom-analytics-conversions' ),
 				'phase'       => FAC4WP_PHASE_STABLE,
 				//'plugin_to_check' => 'woocommerce/woocommerce.php',
 			],
 			'integrate-wp-lost-password' => [
 				'label'       => __( 'Lost password', 'fathom-analytics-conversions' ),
-				'description' => __( 'Check this to add conversation a lost password submission.', 'fathom-analytics-conversions' ),
+				'description' => __( 'Check this to add a conversion from a lost password on your site.', 'fathom-analytics-conversions' ),
 				'phase'       => FAC4WP_PHASE_STABLE,
 				//'plugin_to_check' => 'woocommerce/woocommerce.php',
 			],
