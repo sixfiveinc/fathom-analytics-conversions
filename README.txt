@@ -3,7 +3,7 @@ Contributors: dloxton, khanhvo
 Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
-Tested up to: 6.1.1
+Tested up to: 6.3
 Stable tag: 1.0.11
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -144,6 +144,7 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 
 = 1.0.11 =
 * Added ability to flag conversion for Login and Registration events
+* tested to WordPress 6.3
 
 = 1.0.10 =
 * Moved JS to files to support caching plugins and deferred loading
