@@ -47,7 +47,7 @@ function fac4wp_reload_options() {
 	];
 	$return_options     = array_merge( $return_options, $fac_fathom_options );
 
-	return $return_options;
+	return apply_filters( 'fac4wp_global_reload_options', $return_options );
 }
 
 $fac4wp_options = fac4wp_reload_options();
