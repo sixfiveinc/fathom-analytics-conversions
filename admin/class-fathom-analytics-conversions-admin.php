@@ -365,7 +365,7 @@ class Fathom_Analytics_Conversions_Admin {
 			],
 			FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => [
 				'label'           => __( 'Gravity Forms', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add a conversion from a successful form submission.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission. NOTE: Only works with forms set to AJAX submissions.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'gravityforms/gravityforms.php',
 			],
@@ -386,7 +386,7 @@ class Fathom_Analytics_Conversions_Admin {
 			],
 			FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => [
 				'label'           => __( 'Woocommerce', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add a conversion from a successful order.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful order. NOTE: Fires on the order complete page.', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'woocommerce/woocommerce.php',
 			],
