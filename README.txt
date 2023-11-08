@@ -3,9 +3,9 @@ Contributors: dloxton, khanhvo
 Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
-Tested up to: 6.3
-Stable tag: 1.0.11
-Requires PHP: 7.0
+Tested up to: 6.4
+Stable tag: 1.0.12
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,9 +142,11 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 
 == Changelog ==
 
+= 1.0.12 =
+Added ability to add classes or id's to elements to trigger events
+
 = 1.0.11 =
 * Added ability to flag conversion for Login and Registration events
-* tested to WordPress 6.3
 
 = 1.0.10 =
 * Moved JS to files to support caching plugins and deferred loading
