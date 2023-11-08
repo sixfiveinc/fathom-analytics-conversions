@@ -12,38 +12,42 @@ defined( 'ABSPATH' ) || exit;
 
 global $fac4wp_options, $fac4wp_default_options;
 
-$fac4wp_options = array();
+$fac4wp_options = [];
 
-$fac4wp_default_options = array(
+$fac4wp_default_options = [
 	FAC4WP_OPTION_API_KEY_CODE           => '',
 	FAC_OPTION_INSTALLED_TC              => '',
-	FAC4WP_OPTION_INTEGRATE_WPCF7        => false,
-	FAC4WP_OPTION_INTEGRATE_WPFORMS      => false,
-	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => false,
-	FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => false,
-	FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => false,
-	FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => false,
-);
+	FAC4WP_OPTION_INTEGRATE_WPCF7        => FALSE,
+	FAC4WP_OPTION_INTEGRATE_WPFORMS      => FALSE,
+	FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => FALSE,
+	FAC4WP_OPTION_INTEGRATE_FLUENTFORMS  => FALSE,
+	FAC4WP_OPTION_INTEGRATE_NINJAFORMS   => FALSE,
+	FAC4WP_OPTION_INTEGRATE_WOOCOMMERCE  => FALSE,
+	'integrate-wp-login'                 => FALSE,
+	'integrate-wp-registration'          => FALSE,
+	'integrate-wp-lost-password'         => FALSE,
+];
+apply_filters( 'fac4wp_global_default_options', $fac4wp_default_options );
 
 function fac4wp_reload_options() {
 	global $fac4wp_default_options;
 
 	$stored_options = (array) get_option( FAC4WP_OPTIONS );
 	if ( ! is_array( $fac4wp_default_options ) ) {
-		$fac4wp_default_options = array();
+		$fac4wp_default_options = [];
 	}
 
 	$return_options = array_merge( $fac4wp_default_options, $stored_options );
 
 	// fathom analytics options.
-	$fac_fathom_options = array(
+	$fac_fathom_options = [
 		FAC_FATHOM_TRACK_ADMIN           => fac_fathom_get_admin_tracking(),
 		FAC_OPTION_SITE_ID               => fac_fathom_get_site_id(),
 		'fac_fathom_analytics_is_active' => fac_fathom_analytics_is_active(),
-	);
+	];
 	$return_options     = array_merge( $return_options, $fac_fathom_options );
 
-	return $return_options;
+	return apply_filters( 'fac4wp_global_reload_options', $return_options );
 }
 
 $fac4wp_options = fac4wp_reload_options();
@@ -61,8 +65,7 @@ function fac_fathom_get_site_id() {
 	$fac_options = (array) get_option( FAC4WP_OPTIONS );
 	if ( ! empty( $fac_options[ FAC_OPTION_INSTALLED_TC ] ) ) {
 		return $fac_options[ FAC_OPTION_SITE_ID ];
-	}
-	else { // If not 'installed tracking code elsewhere', get site id from FA plugin.
+	} else { // If not 'installed tracking code elsewhere', get site id from FA plugin.
 		return get_option( 'fathom_site_id', '' );
 	}
 }
@@ -193,9 +196,9 @@ function fac_fathom_api( $url = '' ) {
 	if ( empty( $url ) || empty( $_site_id ) || empty( $_api_key ) ) {
 		return $return;
 	}
-	$wp_request_headers = array(
-		'Authorization' => 'Bearer ' . $_api_key
-	);
+	$wp_request_headers = [
+		'Authorization' => 'Bearer ' . $_api_key,
+	];
 	$request_args       = [
 		'headers' => $wp_request_headers,
 	];
@@ -210,14 +213,13 @@ function fac_fathom_api( $url = '' ) {
 		$error_msg         = '';
 		if ( $response_code !== 200 ) {
 			if ( ! empty( $result ) ) {
-				$result = json_decode( $result, true );
+				$result = json_decode( $result, TRUE );
 				if ( isset( $result['error'] ) && ! empty( $result['error'] ) ) {
 					$error_msg = $result['error'];
 				}
 			}
-		}
-		else {
-			if ( strpos( $result, '<!DOCTYPE ' ) !== false ) {
+		} else {
+			if ( strpos( $result, '<!DOCTYPE ' ) !== FALSE ) {
 				$error_msg      = __( 'ERROR: The API Key you have entered does not have access to this site.', 'fathom-analytics-conversions' );
 				$return['body'] = 'html';
 			}
@@ -237,9 +239,9 @@ function fac_save_fathom_api( $url = '', $body = '' ) {
 	if ( empty( $url ) || empty( $_site_id ) || empty( $_api_key ) ) {
 		return $return;
 	}
-	$wp_request_headers = array(
-		'Authorization' => 'Bearer ' . $_api_key
-	);
+	$wp_request_headers = [
+		'Authorization' => 'Bearer ' . $_api_key,
+	];
 	$request_args       = [
 		'headers' => $wp_request_headers,
 		'body'    => $body,
@@ -255,14 +257,13 @@ function fac_save_fathom_api( $url = '', $body = '' ) {
 		$error_msg         = '';
 		if ( $response_code !== 200 ) {
 			if ( ! empty( $result ) ) {
-				$result = json_decode( $result, true );
+				$result = json_decode( $result, TRUE );
 				if ( isset( $result['error'] ) && ! empty( $result['error'] ) ) {
 					$error_msg = $result['error'];
 				}
 			}
-		}
-		else {
-			if ( strpos( $result, '<!DOCTYPE ' ) !== false ) {
+		} else {
+			if ( strpos( $result, '<!DOCTYPE ' ) !== FALSE ) {
 				$error_msg      = __( 'ERROR: The API Key you have entered does not have access to this site.', 'fathom-analytics-conversions' );
 				$return['body'] = 'html';
 			}
@@ -302,8 +303,7 @@ function fac_check_cf7_forms() {
 				$title            = $form->post_title;
 				if ( empty( $fac_cf7_event_id ) ) {
 					fa_add_event_id_to_cf7( $form_id, $title );
-				}
-				else {
+				} else {
 					fac_update_fathom_event( $fac_cf7_event_id, $title );
 				}
 			}
@@ -352,10 +352,9 @@ function fa_add_event_id_to_wpforms( $form_id = 0, $title = '' ) {
 					$form_content = $form->post_content;
 					// convert to array
 					if ( ! $form_content || empty( $form_content ) ) {
-						$form_data = false;
-					}
-					else {
-						$form_data = wp_unslash( json_decode( $form_content, true ) );
+						$form_data = FALSE;
+					} else {
+						$form_data = wp_unslash( json_decode( $form_content, TRUE ) );
 					}
 					// assign event id
 					$form_data['settings']['fac_wpforms_event_id'] = $event_id;
@@ -363,10 +362,10 @@ function fa_add_event_id_to_wpforms( $form_id = 0, $title = '' ) {
 					$form_data = wp_slash( wp_json_encode( $form_data ) );
 					// save event id to form
 					wp_update_post(
-						array(
+						[
 							'ID'           => $form_id,
 							'post_content' => ( $form_data ),
-						)
+						]
 					);
 				}
 			}
@@ -419,10 +418,9 @@ function fac_check_wpforms_forms() {
 				$form_content = $form->post_content;
 
 				if ( ! $form_content || empty( $form_content ) ) {
-					$form_data = false;
-				}
-				else {
-					$form_data = wp_unslash( json_decode( $form_content, true ) );
+					$form_data = FALSE;
+				} else {
+					$form_data = wp_unslash( json_decode( $form_content, TRUE ) );
 				}
 				//echo '<pre>';print_r($form_data);echo '</pre>';
 				$form_settings    = $form_data['settings'];
@@ -430,8 +428,7 @@ function fac_check_wpforms_forms() {
 				$title            = $form->post_title;
 				if ( empty( $wpforms_event_id ) ) {
 					fa_add_event_id_to_wpforms( $form_id, $title );
-				}
-				else {
+				} else {
 					fac_update_fathom_event( $wpforms_event_id, $title );
 				}
 			}
@@ -447,7 +444,7 @@ function fac_check_gf_forms() {
 	global $fac4wp_options;
 	//echo '<pre>';print_r($fac4wp_options);echo '</pre>';
 	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) && class_exists( 'GFAPI' ) ) {
-		$gf_forms = GFAPI::get_forms( true, false ); // get all gforms.
+		$gf_forms = GFAPI::get_forms( TRUE, FALSE ); // get all gforms.
 
 		if ( $gf_forms ) {
 			foreach ( $gf_forms as $form ) {
@@ -457,8 +454,7 @@ function fac_check_gf_forms() {
 				$title           = $form['title'];
 				if ( empty( $fac_gf_event_id ) ) {
 					fa_add_event_id_to_gf( $form_id, $title );
-				}
-				else {
+				} else {
 					fac_update_fathom_event( $fac_gf_event_id, $title );
 				}
 			}
@@ -492,7 +488,7 @@ function fac_check_ff_forms() {
  * @param string $title The form title.
  */
 function fac_update_event_id_to_ff( $form_id, $title ) {
-	$fac_ff          = get_option( 'fac_fform_' . $form_id, array() );
+	$fac_ff          = get_option( 'fac_fform_' . $form_id, [] );
 	$fac_ff_event_id = is_array( $fac_ff ) && isset( $fac_ff['event_id'] ) ? $fac_ff['event_id'] : '';
 	if ( empty( $fac_ff_event_id ) ) {
 		$new_event_id = fac_add_new_fathom_event( $title );
@@ -502,8 +498,7 @@ function fac_update_event_id_to_ff( $form_id, $title ) {
 				update_option( 'fac_fform_' . $form_id, $fac_ff );
 			}
 		}
-	}
-	else {
+	} else {
 		// Check if event id exist.
 		$event = fac_get_fathom_event( $fac_ff_event_id );
 		if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
@@ -514,10 +509,9 @@ function fac_update_event_id_to_ff( $form_id, $title ) {
 					update_option( 'fac_fform_' . $form_id, $fac_ff );
 				}
 			}
-		}
-		else {
+		} else {
 			// Update event title if not match.
-			$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
+			$body        = isset( $event['body'] ) ? json_decode( $event['body'], TRUE ) : [];
 			$body_object = isset( $body['object'] ) ? $body['object'] : '';
 			$body_name   = isset( $body['name'] ) ? $body['name'] : '';
 			if ( $body_object === 'event' && $body_name !== $title ) {
@@ -560,8 +554,7 @@ function fac_update_event_id_to_nj( $form_id, $title = '' ) {
 					WPN_Helper::update_nf_cache( $form_id, $form_data );
 				}
 			}
-		}
-		else {
+		} else {
 			// Check if event id exist.
 			$event = fac_get_fathom_event( $event_id );
 			if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
@@ -581,10 +574,9 @@ function fac_update_event_id_to_nj( $form_id, $title = '' ) {
 						WPN_Helper::update_nf_cache( $form_id, $form_data );
 					}
 				}
-			}
-			else {
+			} else {
 				// Update event title if not match.
-				$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
+				$body        = isset( $event['body'] ) ? json_decode( $event['body'], TRUE ) : [];
 				$body_object = isset( $body['object'] ) ? $body['object'] : '';
 				$body_name   = isset( $body['name'] ) ? $body['name'] : '';
 				if ( $body_object === 'event' && $body_name !== $title ) {
@@ -598,18 +590,34 @@ function fac_update_event_id_to_nj( $form_id, $title = '' ) {
 /**
  * Check all NinjaForms forms.
  */
-function fac_check_nj_forms() {
-	global $fac4wp_options, $wpdb;
-	if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_NINJAFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
-		$formsTable = $wpdb->prefix . 'nf3_forms';
-		$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
-		//echo '<pre>';print_r( $firstForm );echo '</pre>';
-		if ( $fForms ) {
-			foreach ( $fForms as $form ) {
-				$form_id = $form['id'];
-				$title   = $form['title'];
-				fac_update_event_id_to_nj( $form_id, $title );
+if ( ! function_exists( 'fac_check_nj_forms' ) ) {
+	function fac_check_nj_forms() {
+		global $fac4wp_options, $wpdb;
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_NINJAFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+			$formsTable = $wpdb->prefix . 'nf3_forms';
+			$fForms     = $wpdb->get_results( "SELECT * FROM " . $formsTable, ARRAY_A );
+			//echo '<pre>';print_r( $firstForm );echo '</pre>';
+			if ( $fForms ) {
+				foreach ( $fForms as $form ) {
+					$form_id = $form['id'];
+					$title   = $form['title'];
+					fac_update_event_id_to_nj( $form_id, $title );
+				}
 			}
 		}
+	}
+}
+
+/**
+ * Check if Fathom Analytics is active.
+ */
+if ( ! function_exists( 'is_fac_fathom_analytic_active' ) ) {
+	function is_fac_fathom_analytic_active() {
+		global $fac4wp_options;
+		if ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) {
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 }
