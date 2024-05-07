@@ -24,18 +24,18 @@ class Fathom_Analytics_Conversions_URL {
 	/**
 	 * The ID of this plugin.
 	 *
+	 * @var      string $plugin_name The ID of this plugin.
 	 * @since    1.2
 	 * @access   private
-	 * @var      string $plugin_name The ID of this plugin.
 	 */
 	private $plugin_name;
 
 	/**
 	 * The version of this plugin.
 	 *
+	 * @var      string $version The current version of this plugin.
 	 * @since    1.2
 	 * @access   private
-	 * @var      string $version The current version of this plugin.
 	 */
 	private $version;
 
@@ -53,13 +53,16 @@ class Fathom_Analytics_Conversions_URL {
 		$this->version     = $version;
 
 		// Adds a meta box to one or more screens.
-		add_action( 'add_meta_boxes', array( $this, 'fac_add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', [ $this, 'fac_add_meta_boxes' ] );
 		// Save the meta when post is saved.
-		add_action( 'save_post', array( $this, 'fac_save_post' ) );
+		add_action( 'save_post', [ $this, 'fac_save_post' ] );
 
 		// Render JS.
 		//add_action( 'wp_footer', array( $this, 'fac_url_wp_footer' ), 100 );
-		add_filter( 'fac_localize_script_data', array( $this, 'fac_localize_script_data_url' ) );
+		add_filter( 'fac_localize_script_data', [
+			$this,
+			'fac_localize_script_data_url',
+		] );
 
 	}
 
@@ -69,16 +72,20 @@ class Fathom_Analytics_Conversions_URL {
 	 * @since    1.2
 	 */
 	public function fac_add_meta_boxes() {
-
-		add_meta_box( 'fac-meta-box',
-			__( 'Fathom Analytics', 'fathom-analytics-conversions' ),
-			array(
-				$this,
-				'fac_display_callback',
-			),
-			null,
-			'side'
-		);
+		$screens = get_post_types();
+		foreach ( $screens as $screen ) {
+			if ( is_post_type_viewable( $screen ) ) {
+				add_meta_box( 'fac-meta-box',
+					__( 'Fathom Analytics', 'fathom-analytics-conversions' ),
+					[
+						$this,
+						'fac_display_callback',
+					],
+					$screen,
+					'side'
+				);
+			}
+		}
 	}
 
 	/**
@@ -91,31 +98,37 @@ class Fathom_Analytics_Conversions_URL {
 		wp_nonce_field( 'fac_box_nonce_action', 'fac_box_nonce' );
 
 		// Use get_post_meta to retrieve an existing value from the database.
-		$value      = get_post_meta( $post->ID, '_fac_url_page', true );
-		$event_name = get_post_meta( $post->ID, '_fac_url_event_name', true );
+		$value      = get_post_meta( $post->ID, '_fac_url_page', TRUE );
+		$event_name = get_post_meta( $post->ID, '_fac_url_event_name', TRUE );
 		if ( empty( $event_name ) ) {
 			$title      = get_the_title( $post );
 			$event_name = $title . ' - ' . $post->ID;
 		}
 		$event_name_css = $value == '1' ? '' : 'display: none !important;';
 		?>
-        <label class="link_to_fathom_event_title" style="margin-bottom: 8px;display: block;font-weight: 500;">
+        <label class="link_to_fathom_event_title"
+               style="margin-bottom: 8px;display: block;font-weight: 500;">
 			<?php _e( 'Link to Fathom Event', 'fathom-analytics-conversions' ); ?>
         </label>
         <div class="link_to_fathom_event" style="margin-bottom: 16px;">
             <label for="link_to_fathom_event">
-                <input type="checkbox" id="link_to_fathom_event" class="" name="link_to_fathom_event"
+                <input type="checkbox" id="link_to_fathom_event" class=""
+                       name="link_to_fathom_event"
                        value="1" <?php checked( $value ); ?> />
 				<?php _e( 'Add Fathom Event conversations every time this page is visited.', 'fathom-analytics-conversions' ); ?>
             </label>
         </div>
-        <div class="link_to_fathom_event_name_field" style="<?php echo $event_name_css; ?>">
-            <label for="link_to_fathom_event_name" style="margin-bottom: 8px;display: block;font-weight: 500;">
+        <div class="link_to_fathom_event_name_field"
+             style="<?php echo $event_name_css; ?>">
+            <label for="link_to_fathom_event_name"
+                   style="margin-bottom: 8px;display: block;font-weight: 500;">
 				<?php _e( 'Event Name', 'fathom-analytics-conversions' ); ?>
             </label>
             <div class="link_to_fathom_event_name components-form-token-field__input-container">
-                <input type="text" id="link_to_fathom_event_name" class="components-form-token-field__input"
-                       name="link_to_fathom_event_name" value="<?php echo esc_attr( $event_name ); ?>"/>
+                <input type="text" id="link_to_fathom_event_name"
+                       class="components-form-token-field__input"
+                       name="link_to_fathom_event_name"
+                       value="<?php echo esc_attr( $event_name ); ?>"/>
             </div>
         </div>
         <script>
@@ -164,7 +177,7 @@ class Fathom_Analytics_Conversions_URL {
 				$title = get_the_title( $post_id ) . ' - ' . $post_id;
 			}
 			// get event id.
-			$event_id = get_post_meta( $post_id, '_fac_page_event_id', true );
+			$event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
 			if ( empty( $event_id ) ) {
 				$new_event_id = fac_add_new_fathom_event( $title );
 				if ( ! empty( $new_event_id ) ) {
@@ -180,7 +193,7 @@ class Fathom_Analytics_Conversions_URL {
 					}
 				} else {
 					// Update event title if not match.
-					$body        = isset( $event['body'] ) ? json_decode( $event['body'], true ) : array();
+					$body        = isset( $event['body'] ) ? json_decode( $event['body'], TRUE ) : [];
 					$body_object = isset( $body['object'] ) ? $body['object'] : '';
 					$body_name   = isset( $body['name'] ) ? $body['name'] : '';
 					if ( $body_object === 'event' && $body_name !== $title ) {
@@ -203,8 +216,8 @@ class Fathom_Analytics_Conversions_URL {
 		global $post;
 		if ( is_singular() ) {
 			$post_id       = $post->ID;
-			$track_page    = get_post_meta( $post_id, '_fac_url_page', true );
-			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', true );
+			$track_page    = get_post_meta( $post_id, '_fac_url_page', TRUE );
+			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
 			if ( $track_page && $page_event_id ) {
 				?>
                 <script>fathom.trackGoal('<?php echo $page_event_id;?>', 0);</script>
@@ -213,13 +226,13 @@ class Fathom_Analytics_Conversions_URL {
 		}
 	}
 
-    // Send page event id to script.
+	// Send page event id to script.
 	public function fac_localize_script_data_url( $data ) {
 		global $post;
 		if ( is_singular() ) {
 			$post_id       = $post->ID;
-			$track_page    = get_post_meta( $post_id, '_fac_url_page', true );
-			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', true );
+			$track_page    = get_post_meta( $post_id, '_fac_url_page', TRUE );
+			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
 			if ( $track_page && $page_event_id ) {
 				$data['page_event_id'] = $page_event_id;
 			}
