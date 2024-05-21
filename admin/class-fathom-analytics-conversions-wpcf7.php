@@ -18,7 +18,7 @@
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/wpcf7
- * @author     Duncan Isaksen-Loxton <duncan@sixfive.com.au>
+ * @author     Duncan Isaksen-Loxton <duncan@sixfive.io>
  */
 class Fathom_Analytics_Conversions_WPCF7 {
 
