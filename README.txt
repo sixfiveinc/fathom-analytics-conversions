@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.4
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -141,6 +141,10 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.0.13 =
+Changed developer website
+Hide the meta box for non public post types - FIXES https://wordpress.org/support/topic/hide-the-meta-box-for-non-public-post-types/
 
 = 1.0.12 =
 Added ability to add classes or id's to elements to trigger events
