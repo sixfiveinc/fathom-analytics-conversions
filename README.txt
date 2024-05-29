@@ -3,7 +3,7 @@ Contributors: dloxton, khanhvo
 Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
-Tested up to: 6.4
+Tested up to: 6.5.3
 Stable tag: 1.0.13
 Requires PHP: 7.4
 License: GPLv2 or later
