@@ -95,7 +95,7 @@ The team at Fathom Analytics have been supportive of the production of this plug
 
 = Why did you build this plugin? =
 
-In January 2022 [Google Analytics was deemed illegal in the EU](https://www.sixfive.com.au/2022/02/austrian-dpa-rules-that-google-analytics-is-not-gdpr-compliant/) as data would be sent to Google server's in the US. this started our search for a more privacy focussed platform - we found Fathom Analytics.
+In January 2022 [Google Analytics was deemed illegal in the EU](https://www.sixfive.io/2022/02/austrian-dpa-rules-that-google-analytics-is-not-gdpr-compliant/) as data would be sent to Google server's in the US. this started our search for a more privacy focussed platform - we found Fathom Analytics.
 
 In March 2022 [Google announced sunset July 1, 2023 and data deletion (+6 months) of Google Analytics Universal](https://www.searchenginejournal.com/google-sunsetting-universal-analytics-in-2023/442168/), with no data being kept essentially forcing users on to Google Analytics v4. This only complicates matters for the billions of sites using Google Analytics, and does not deal with the privacy requirements of EU users.
 
@@ -105,7 +105,7 @@ So to make this easier for ourselves, marketers, website owners and non-coders -
 
 = Who are you? =
 
-We are the team from [SixFive](https://www.sixfive.com.au) and we build, host and care for our clients websites built on WordPress. We have more than 20 years experience with hundreds of clients globally.
+We are the team from [SixFive](https://www.sixfive.io) and we build, host and care for our clients websites built on WordPress. We have more than 20 years experience with hundreds of clients globally.
 
 = How do I get started? =
 
