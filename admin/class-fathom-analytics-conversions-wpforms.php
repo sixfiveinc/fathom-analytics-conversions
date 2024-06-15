@@ -90,7 +90,7 @@ class Fathom_Analytics_Conversions_WPForms {
 			} else {
 				// check if event id exist
 				$event = fac_get_fathom_event( $wpforms_event_id );
-				if ( $event['code'] !== 200 ) {
+				if ( isset( $event['code'] ) && $event['code'] !== 200 ) {
 					fa_add_event_id_to_wpforms( $post_ID, $title );
 				} else {
 					fac_update_fathom_event( $wpforms_event_id, $title );
