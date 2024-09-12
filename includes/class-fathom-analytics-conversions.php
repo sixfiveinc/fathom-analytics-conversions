@@ -303,7 +303,7 @@ class Fathom_Analytics_Conversions {
 
 		$plugin_public = new Fathom_Analytics_Conversions_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		// add hidden field to CF7 form - frontend.
