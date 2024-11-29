@@ -185,11 +185,7 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 
 			$submittedData = (array) $_POST['fac4wp-options'];
 			$submittedData = $this->fac4wp_sanitize_options( $submittedData );
-			//echo '<pre>';print_r( $submittedData );echo '</pre>';
 			update_option( 'fac4wp-options', $submittedData );
-
-			// Add/Update the event.
-			$this->fac_update_event_id_to_classes_ids();
 		}
 	}
 
@@ -261,179 +257,63 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 		return $output;
 	}
 
-
-	/**
-	 * Add/update event id to classes/ids.
-	 *
-	 */
-	public function fac_update_event_id_to_classes_ids() {
-		// Admin settings.
-		$ad_Options  = get_option( 'fac4wp-options', [] );
-		$classes_ids = isset( $ad_Options['classes_ids'] ) ? $ad_Options['classes_ids'] : [];
-		if ( is_array( $classes_ids ) && count( $classes_ids ) > 0 ) {
-			foreach ( $classes_ids as $row ) {
-				// Get saved events with class.
-				$option        = (array) get_option( 'fac_options', [] );
-				$event_classes = isset( $option['event_classes'] ) ? $option['event_classes'] : [];
-
-				$title   = trim( $row['name'] );
-				$classes = trim( $row['class'] );
-				// Find stored event id by title.
-				$check_title = '';
-				//$check_title = isset($event_classes[$title] ) && !empty($event_classes[$title]) ? $event_classes[$title] : '';
-				if ( isset( $event_classes['titles'] ) && is_array( $event_classes['titles'] ) ) {
-					foreach ( $event_classes['titles'] as $event_class_t ) {
-						if ( trim( $event_class_t[0] ) === $title ) {
-							$check_title = $event_class_t[1];
-							break;
-						}
-					}
-				}
-				// Find stored event id by class or id.
-				$check_class = '';
-				$classes     = explode( ',', $classes );
-				foreach ( $classes as $class ) {
-					$class = trim( $class );
-					//$check_class = isset( $event_classes[ $class ] ) && ! empty( $event_classes[ $class ] ) ? $event_classes[ $class ] : '';
-					if ( isset( $event_classes['classes'] ) && is_array( $event_classes['classes'] ) ) {
-						foreach ( $event_classes['classes'] as $event_class_c ) {
-							if ( trim( $event_class_c[0] ) === $class ) {
-								$check_class = $event_class_c[1];
-								break;
-							}
-						}
-					}
-				}
-
-				// Determine event id.
-				if ( ! empty( $check_title ) && ! empty( $check_class ) ) {
-					$event_id         = $check_class;
-					$save_event_title = 0;
-				} elseif ( empty( $check_title ) && ! empty( $check_class ) ) {
-					$event_id         = $check_class;
-					$save_event_title = 1;
-				} elseif ( ! empty( $check_title ) && empty( $check_class ) ) {
-					$event_id         = $check_title;
-					$save_event_title = 0;
-				} else {
-					$event_id         = '';
-					$save_event_title = 1;
-				}
-
-				// Add new event id.
-				if ( empty( $event_id ) ) {
-					$new_event_id = fac_add_new_fathom_event( $title );
-				} else {
-					// Check if event id exist.
-					$event = fac_get_fathom_event( $event_id );
-					if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
-						$new_event_id = fac_add_new_fathom_event( $title );
-					} else {
-						// Update event title if not match.
-						$body        = isset( $event['body'] ) ? json_decode( $event['body'], TRUE ) : [];
-						$body_object = isset( $body['object'] ) ? $body['object'] : '';
-						$body_name   = isset( $body['name'] ) ? $body['name'] : '';
-						if ( $body_object === 'event' && $body_name !== $title ) {
-							fac_update_fathom_event( $event_id, $title ); // Update Fathom event with the current title.
-						}
-						$new_event_id = $event_id;
-					}
-				}
-
-				// Save event with class.
-				if ( ! empty( $new_event_id ) ) {
-					foreach ( $classes as $class ) {
-						$class                      = trim( $class );
-						$event_classes['classes'][] = [ $class, $new_event_id ];
-					}
-					if ( $save_event_title ) {
-						$event_classes['titles'][] = [ $title, $new_event_id ];
-					}
-				}
-				$option['event_classes'] = $event_classes;
-				update_option( 'fac_options', $option );
-			}
-		}
-	}
-
 	/**
 	 * JavaScript
 	 *
 	 * @since    1.0.9
 	 */
 	public function fac_classes_ids_footer_script() {
-		global $fac4wp_options;
-		if ( ! ( empty( $fac4wp_options[ FAC_FATHOM_TRACK_ADMIN ] ) && current_user_can( 'manage_options' ) ) ) { // track visits by administrators!
+		//global $fac4wp_options;
+		if ( fac_fathom_analytics_is_active() && ! fac_fathom_is_excluded_from_tracking() ) {
 			// Admin settings.
 			$ad_Options  = get_option( 'fac4wp-options', [] );
 			$classes_ids = isset( $ad_Options['classes_ids'] ) ? $ad_Options['classes_ids'] : [];
 			if ( is_array( $classes_ids ) && count( $classes_ids ) > 0 ) {
 				$track_event = [];
 				foreach ( $classes_ids as $row ) {
-					// Get saved events with class.
-					$option        = (array) get_option( 'fac_options', [] );
-					$event_classes = isset( $option['event_classes'] ) ? $option['event_classes'] : [];
-					//echo '<pre>';print_r( $event_classes );echo '</pre>';
 
-					$classes = trim( $row['class'] );
-					$value   = trim( $row['value'] );
-					$value   = (int) $value * 100;
-					$classes = explode( ',', $classes );
-					foreach ( $classes as $class ) {
-						$class = trim( $class );
-						if ( isset( $event_classes['classes'] ) && is_array( $event_classes['classes'] ) ) {
-							foreach ( $event_classes['classes'] as $event_class_c ) {
-								if ( trim( $event_class_c[0] ) === $class ) {
-									$event_id      = $event_class_c[1];
-									$track_event[] = [
-										$class,
-										$event_id,
-										$value
-									];
-									break;
-								}
-							}
-						}
+					$name      = trim( $row['name'] );
+					$classes   = trim( $row['class'] );
+					$value     = trim( $row['value'] );
+					$value     = (int) $value * 100;
+					$a_classes = explode( ',', $classes );
+					foreach ( $a_classes as $class ) {
+						$track_event[] = [
+							trim( $class ),
+							$name,
+							$value,
+						];
 					}
 				}
 
 				if ( count( $track_event ) > 0 ) {
-					$fac_content = '
-<!-- Fathom Analytics Conversions -->
-<script data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
-					$fac_content .= '
-	window.addEventListener("load", (event) => {';
+					$fac_content = '<script id="fac-classes-ids" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
+					$fac_content .= 'window.addEventListener("load", (event) => {' . "\n\t";
 					foreach ( $track_event as $k => $event ) {
 						if ( strpos( $event[0], '#' ) === 0 ) {
 							$id          = substr( $event[0], 1 );
+							$fac_content .= 'const id_' . $k . ' = document.getElementById("' . $id . '");' . "\n\t";
+							$fac_content .= 'if( id_' . $k . ' ) {' . "\n\t\t";
+							$fac_content .= 'id_' . $k . '.addEventListener("click", () => {';
 							$fac_content .= '
-        const id_' . $k . ' = document.getElementById("' . $id . '");';
+            fathom.trackEvent("' . $event[1] . '", {_value: ' . $event[2] . '});';
 							$fac_content .= '
-        if( id_' . $k . ' ) {
-            id_' . $k . '.addEventListener("click", () => {console.log("406 ' . $k . '");';
-							$fac_content .= '
-                fathom.trackGoal("' . $event[1] . '", ' . $event[2] . ');';
-							$fac_content .= '
-	        });
-	    }';
+	    });' . "\n\t";
+							$fac_content .= '}' . "\n\t";
 						} else {
+							$fac_content .= 'document.querySelectorAll("' . $event[0] . '").forEach(item => {';
 							$fac_content .= '
-        document.querySelectorAll("' . $event[0] . '").forEach(item => {';
+        item.addEventListener("click", event => {';
 							$fac_content .= '
-            item.addEventListener("click", event => {';
-							$fac_content .= '
-                fathom.trackGoal("' . $event[1] . '", ' . $event[2] . ');';
-							$fac_content .= '
-	        });';
+            fathom.trackEvent("' . $event[1] . '", {_value: ' . $event[2] . '});';
 							$fac_content .= '
 	    });';
+							$fac_content .= '
+	});' . "\n\t";
 						}
 					}
-					$fac_content .= '
-	});';
-					$fac_content .= '
-</script>
-<!-- END Fathom Analytics Conversions -->';
+					$fac_content .= '});';
+					$fac_content .= '</script><!-- END Fathom Analytics Conversions -->';
 					echo $fac_content;
 				}
 			}
