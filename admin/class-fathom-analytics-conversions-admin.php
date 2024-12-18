@@ -162,13 +162,6 @@ class Fathom_Analytics_Conversions_Admin {
 				//if(get_current_user_id() === 2) {
 				if ( isset( $result['error'] ) && ! empty( $result['error'] ) ) {
 					echo '<p class="fac_error">' . esc_html( $result['error'] ) . '</p>';
-				} else {
-					// check forms.
-					fac_check_cf7_forms();
-					fac_check_wpforms_forms();
-					fac_check_gf_forms();
-					fac_check_ff_forms();
-					fac_check_nj_forms();
 				}
 				//}
 
@@ -507,11 +500,11 @@ class Fathom_Analytics_Conversions_Admin {
             <h2><?php _e( 'Fathom Analytics Conversions options', 'fathom-analytics-conversions' ); ?></h2>
             <form action="options.php" method="post">
 
-                <?php settings_fields( FAC4WP_ADMIN_GROUP ); ?>
+				<?php settings_fields( FAC4WP_ADMIN_GROUP ); ?>
 
-                <?php do_settings_sections( FAC4WP_ADMINSLUG ); ?>
+				<?php do_settings_sections( FAC4WP_ADMINSLUG ); ?>
 
-                <?php do_action( 'fac_settings_field_before_submit_button' ); ?>
+				<?php do_action( 'fac_settings_field_before_submit_button' ); ?>
 
 				<?php submit_button(); ?>
 
