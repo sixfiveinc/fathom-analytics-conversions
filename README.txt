@@ -143,7 +143,7 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 == Changelog ==
 
 = 1.1.1 =
-* Fixed a minor issue
+* Fixed Gravity error
 
 = 1.1 =
 * Compatibility with the latest Fathom API
