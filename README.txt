@@ -143,7 +143,7 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 == Changelog ==
 
 = 1.1.1 =
-* Fixed Gravity error
+* Fixed redirection issue when using ajax submission. FIXES:https://wordpress.org/support/topic/version-1-1-breaks-gravity-forms-with-redirect-confirmation/
 
 = 1.1 =
 * Compatibility with the latest Fathom API
