@@ -57,7 +57,6 @@ class Fathom_Analytics_Conversions_GravityForms {
 
 		// Add custom form attribute - form title.
 		add_filter( 'gform_form_tag', [ $this, 'fac_gform_form_tag' ], 10, 2 );
-		add_filter( 'gform_confirmation', [ $this, 'fac_gform_confirmation' ], 10, 2 );
 
 		// Add custom form element - form title.
 		add_filter( 'gform_form_after_open', [
@@ -86,7 +85,7 @@ class Fathom_Analytics_Conversions_GravityForms {
 			return $form_args;
 		}
 
-		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && ( $fac4wp_options['fac_fathom_analytics_is_active'] || ! empty( $fac4wp_options[ FAC_OPTION_INSTALLED_TC ] ) ) ) {
+		if ( $fac4wp_options[ FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS ] && is_fac_fathom_analytic_active() ) {
 			$form_args['ajax'] = TRUE;
 		}
 
@@ -98,12 +97,6 @@ class Fathom_Analytics_Conversions_GravityForms {
 		$html .= '<div id="gform_name_' . $form['id'] . '" data-form-name="' . esc_html( $form['title'] ) . '"></div>';
 
 		return $html;
-	}
-	// Add custom form element - form title.
-	public function fac_gform_confirmation( $confirmation, $form ) {
-		$confirmation .= '<div id="gform_name_' . $form['id'] . '" data-form-name="' . esc_html( $form['title'] ) . '"></div>';
-
-		return $confirmation;
 	}
 
 	/**

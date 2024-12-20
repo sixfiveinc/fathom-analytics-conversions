@@ -4,7 +4,7 @@
  * The standard WP login/registration-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.0.9
+ * @since      1.1.1
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/wp-login-registration
@@ -26,7 +26,7 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 	 * The ID of this plugin.
 	 *
 	 * @var      string $plugin_name The ID of this plugin.
-	 * @since    1.0.9
+	 * @since    1.1.1
 	 * @access   private
 	 */
 	private $plugin_name;
@@ -115,15 +115,19 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 						if ( is_array( $settings ) && count( $settings ) > 0 ) {
 							$i = 0;
 							foreach ( $settings as $k => $row ) {
+								$required = '';
+								if ( ! empty( $row['name'] ) ) {
+									$required = 'required';
+								}
 								echo '<tr class="table_row">';
 								echo '<td>';
 								echo '<input type="text"
                                            name="fac4wp-options[classes_ids][' . $i . '][name]" value="' . $row['name'] . '"
-                                           class="classes_ids_name" required></td>';
+                                           class="classes_ids_name" ' . $required . '></td>';
 								echo '<td class="classes_ids_class_td">
                                     <input type="text" name="fac4wp-options[classes_ids][' . $i . '][class]" value="' . $row['class'] . '"
                                            id="course_' . $i . '"
-                                           class="classes_ids_class" required>';
+                                           class="classes_ids_class" ' . $required . '>';
 								echo '</td>';
 								echo '<td>';
 								echo '<input type="number"

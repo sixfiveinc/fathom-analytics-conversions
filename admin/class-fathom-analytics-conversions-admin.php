@@ -3,7 +3,7 @@
  * The admin-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.0.9
+ * @since      1.1.1
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/admin
@@ -25,7 +25,7 @@ class Fathom_Analytics_Conversions_Admin {
 	 * The ID of this plugin.
 	 *
 	 * @var      string $plugin_name The ID of this plugin.
-	 * @since    1.0.0
+	 * @since    1.1.1
 	 * @access   private
 	 */
 	private $plugin_name;
@@ -213,7 +213,9 @@ class Fathom_Analytics_Conversions_Admin {
 				switch ( gettype( $opt_val ) ) {
 					case 'boolean':
 					{
-						echo '<input type="checkbox" id="' . esc_attr( FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']' ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']' ) . '" value="1" ' . checked( 1, $opt_val, FALSE ) . ' /><br />' . esc_html( $args['description'] );
+						echo '<input type="checkbox" id="' . esc_attr( FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']' ) . '" name="' . esc_attr( FAC4WP_OPTIONS . '[' . $args['option_field_id'] . ']' ) . '" value="1" ' . checked( 1, $opt_val, FALSE ) . ' />';
+						echo '<br />';
+						echo wp_kses( $args['description'], [ 'strong' => [] ] );
 
 						if ( isset( $args['plugin_to_check'] ) && ( $args['plugin_to_check'] != '' ) ) {
 							$is_plugin_active = 0;
@@ -358,7 +360,7 @@ class Fathom_Analytics_Conversions_Admin {
 			],
 			FAC4WP_OPTION_INTEGRATE_GRAVIRYFORMS => [
 				'label'           => __( 'Gravity Forms', 'fathom-analytics-conversions' ),
-				'description'     => __( 'Check this to add a conversion from a successful form submission. NOTE: Only works with forms set to AJAX submissions.', 'fathom-analytics-conversions' ),
+				'description'     => __( 'Check this to add a conversion from a successful form submission. <strong>NOTE: it will set all forms to AJAX submissions.</strong>', 'fathom-analytics-conversions' ),
 				'phase'           => FAC4WP_PHASE_STABLE,
 				'plugin_to_check' => 'gravityforms/gravityforms.php',
 			],
