@@ -57,97 +57,13 @@ class Fathom_Analytics_Conversions_WP {
 		add_action( 'login_footer', [ $this, 'fac_maybe_add_fathom_script' ] );
 
 		// Login form.
-		$this->fac_check_login_form();
 		add_action( 'login_footer', [ $this, 'fac_login_footer' ] );
 
 		// Registration form.
-		$this->fac_check_registration_form();
 		add_action( 'login_footer', [ $this, 'fac_registration_footer' ] );
 
 		// Lost password form.
-		$this->fac_check_lost_password_form();
 		add_action( 'login_footer', [ $this, 'fac_lost_password_footer' ] );
-
-	}
-
-	/**
-	 * Check event id of the login form.
-	 *
-	 * @since    1.0.9
-	 */
-	public function fac_check_login_form() {
-		global $fac4wp_options;
-		$update      = 0;
-		$option_name = 'fac_options';
-		$option      = (array) get_option( $option_name, [] );
-		if ( $fac4wp_options['integrate-wp-login'] ) {
-			if ( ! isset( $option['wp_login_event_id'] ) || empty( $option['wp_login_event_id'] ) ) {
-				$event_title  = apply_filters( 'fac_login_event_title', __( 'WP Login', 'fathom-analytics-conversions' ) );
-				$new_event_id = fac_add_new_fathom_event( $event_title );
-				//$new_event_id = 'IN6NIAKX';
-				if ( ! empty( $new_event_id ) ) {
-					$option['wp_login_event_id'] = $new_event_id;
-					$update                      = 1;
-				}
-			}
-		}
-		if ( $update ) {
-			update_option( $option_name, $option );
-		}
-
-	}
-
-	/**
-	 * Check event id of the registration form.
-	 *
-	 * @since    1.0.9
-	 */
-	public function fac_check_registration_form() {
-		global $fac4wp_options;
-		$update      = 0;
-		$option_name = 'fac_options';
-		$option      = (array) get_option( $option_name, [] );
-		if ( $fac4wp_options['integrate-wp-registration'] ) {
-			if ( ! isset( $option['wp_registration_event_id'] ) || empty( $option['wp_registration_event_id'] ) ) {
-				$event_title  = apply_filters( 'fac_registration_event_title', __( 'WP Registration', 'fathom-analytics-conversions' ) );
-				$new_event_id = fac_add_new_fathom_event( $event_title );
-				//$new_event_id = 'IN6NIAKX';
-				if ( ! empty( $new_event_id ) ) {
-					$option['wp_registration_event_id'] = $new_event_id;
-					$update                             = 1;
-				}
-			}
-		}
-		if ( $update ) {
-			update_option( $option_name, $option );
-		}
-
-	}
-
-	/**
-	 * Check event id of the lost password form.
-	 *
-	 * @since    1.0.9
-	 */
-	public function fac_check_lost_password_form() {
-		global $fac4wp_options;
-		$update      = 0;
-		$option_name = 'fac_options';
-		$option      = (array) get_option( $option_name, [] );
-		if ( $fac4wp_options['integrate-wp-lost-password'] ) {
-			if ( ! isset( $option['wp_lost_password_event_id'] ) || empty( $option['wp_lost_password_event_id'] ) ) {
-				$event_title  = apply_filters( 'fac_lost_password_event_title', __( 'WP Lost Password', 'fathom-analytics-conversions' ) );
-				$new_event_id = fac_add_new_fathom_event( $event_title );
-				//$new_event_id = 'IN6NIAKX';
-				if ( ! empty( $new_event_id ) ) {
-					$option['wp_lost_password_event_id'] = $new_event_id;
-					$update                              = 1;
-				}
-			}
-		}
-		if ( $update ) {
-			update_option( $option_name, $option );
-		}
 
 	}
 
@@ -162,8 +78,8 @@ class Fathom_Analytics_Conversions_WP {
 			return;
 		}
 		if ( $fac4wp_options['integrate-wp-login'] || $fac4wp_options['integrate-wp-registration'] || $fac4wp_options['integrate-wp-lost-password'] ) {
-			if ( $fac4wp_options['fac_fathom_analytics_is_active'] && function_exists( 'fathom_print_js_snippet' ) ) {
-				fathom_print_js_snippet();
+			if ( $fac4wp_options['fac_fathom_analytics_is_active'] && function_exists( 'fathom_enqueue_js_snippet' ) ) {
+				fathom_enqueue_js_snippet();
 			}
 		}
 	}
@@ -179,26 +95,21 @@ class Fathom_Analytics_Conversions_WP {
 			return;
 		}
 		if ( $fac4wp_options['integrate-wp-login'] ) {
-			$option = (array) get_option( 'fac_options', [] );
-			if ( ! empty( $option['wp_login_event_id'] ) ) {
-				$fac_content = '
-<!-- Fathom Analytics Conversions -->
-<script data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
-				$fac_content .= '
+			$event_title = apply_filters( 'fac_login_event_title', __( 'WP Login', 'fathom-analytics-conversions' ) );
+
+			$fac_content = '<script id="fac-login-form" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
+			$fac_content .= '
 	window.addEventListener("load", (event) => {
 		const login_form = document.getElementById("loginform");
-		if(login_form) {
+		if( login_form ) {
 			login_form.addEventListener("submit", () => {
-                fathom.trackGoal("' . $option['wp_login_event_id'] . '", 0);
+                fathom.trackEvent("' . $event_title . '");
             });
         }
 	});';
-				$fac_content .= '
-</script>
-<!-- END Fathom Analytics Conversions -->
-';
-				echo $fac_content;
-			}
+			$fac_content .= '</script>';
+
+			echo $fac_content;
 		}
 	}
 
@@ -213,26 +124,21 @@ class Fathom_Analytics_Conversions_WP {
 			return;
 		}
 		if ( $fac4wp_options['integrate-wp-registration'] ) {
-			$option = (array) get_option( 'fac_options', [] );
-			if ( ! empty( $option['wp_registration_event_id'] ) ) {
-				$fac_content = '
-<!-- Fathom Analytics Conversions -->
-<script data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
-				$fac_content .= '
+			$event_title = apply_filters( 'fac_registration_event_title', __( 'WP Registration', 'fathom-analytics-conversions' ) );
+
+			$fac_content = '<script id="fac-registration-form" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
+			$fac_content .= '
 	window.addEventListener("load", (event) => {
 		const register_form = document.getElementById("registerform");
 		if(register_form) {
 			register_form.addEventListener("submit", () => {
-                fathom.trackGoal("' . $option['wp_registration_event_id'] . '", 0);
+                fathom.trackEvent("' . $event_title . '");
             });
         }
 	});';
-				$fac_content .= '
-</script>
-<!-- END Fathom Analytics Conversions -->
-';
-				echo $fac_content;
-			}
+			$fac_content .= '</script>';
+
+			echo $fac_content;
 		}
 	}
 
@@ -247,26 +153,21 @@ class Fathom_Analytics_Conversions_WP {
 			return;
 		}
 		if ( $fac4wp_options['integrate-wp-lost-password'] ) {
-			$option = (array) get_option( 'fac_options', [] );
-			if ( ! empty( $option['wp_lost_password_event_id'] ) ) {
-				$fac_content = '
-<!-- Fathom Analytics Conversions -->
-<script data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
-				$fac_content .= '
+			$event_title = apply_filters( 'fac_lost_password_event_title', __( 'WP Lost Password', 'fathom-analytics-conversions' ) );
+
+			$fac_content = '<script id="fac-lost-password-form" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
+			$fac_content .= '
 	window.addEventListener("load", (event) => {
 		const lost_password_form = document.getElementById("lostpasswordform");
 		if(lost_password_form) {
 			lost_password_form.addEventListener("submit", () => {
-                fathom.trackGoal("' . $option['wp_lost_password_event_id'] . '", 0);
+                fathom.trackEvent("' . $event_title . '");
             });
         }
 	});';
-				$fac_content .= '
-</script>
-<!-- END Fathom Analytics Conversions -->
-';
-				echo $fac_content;
-			}
+			$fac_content .= '</script>';
+
+			echo $fac_content;
 		}
 	}
 

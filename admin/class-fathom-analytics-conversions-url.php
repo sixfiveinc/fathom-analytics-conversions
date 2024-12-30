@@ -58,12 +58,7 @@ class Fathom_Analytics_Conversions_URL {
 		add_action( 'save_post', [ $this, 'fac_save_post' ] );
 
 		// Render JS.
-		//add_action( 'wp_footer', array( $this, 'fac_url_wp_footer' ), 100 );
-		add_filter( 'fac_localize_script_data', [
-			$this,
-			'fac_localize_script_data_url',
-		] );
-
+		add_action( 'wp_footer', [ $this, 'fac_url_wp_footer' ], 100 );
 	}
 
 	/**
@@ -176,31 +171,6 @@ class Fathom_Analytics_Conversions_URL {
 			} else {
 				$title = get_the_title( $post_id ) . ' - ' . $post_id;
 			}
-			// get event id.
-			$event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
-			if ( empty( $event_id ) ) {
-				$new_event_id = fac_add_new_fathom_event( $title );
-				if ( ! empty( $new_event_id ) ) {
-					update_post_meta( $post_id, '_fac_page_event_id', $new_event_id );
-				}
-			} else {
-				// Check if event id exist.
-				$event = fac_get_fathom_event( $event_id );
-				if ( $event['code'] !== 200 ) { // Not exist, then add a new one.
-					$new_event_id = fac_add_new_fathom_event( $title );
-					if ( ! empty( $new_event_id ) ) {
-						update_post_meta( $post_id, '_fac_page_event_id', $new_event_id );
-					}
-				} else {
-					// Update event title if not match.
-					$body        = isset( $event['body'] ) ? json_decode( $event['body'], TRUE ) : [];
-					$body_object = isset( $body['object'] ) ? $body['object'] : '';
-					$body_name   = isset( $body['name'] ) ? $body['name'] : '';
-					if ( $body_object === 'event' && $body_name !== $title ) {
-						fac_update_fathom_event( $event_id, $title ); // Update Fathom event with the current title.
-					}
-				}
-			}
 		} else {
 			delete_post_meta( $post_id, '_fac_url_page' );
 			delete_post_meta( $post_id, '_fac_url_event_name' );
@@ -214,31 +184,22 @@ class Fathom_Analytics_Conversions_URL {
 	 */
 	public function fac_url_wp_footer() {
 		global $post;
-		if ( is_singular() ) {
-			$post_id       = $post->ID;
-			$track_page    = get_post_meta( $post_id, '_fac_url_page', TRUE );
-			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
-			if ( $track_page && $page_event_id ) {
+		if ( is_singular() && is_fac_fathom_analytic_active() && ! fac_fathom_is_excluded_from_tracking() ) {
+			$post_id    = $post->ID;
+			$track_page = get_post_meta( $post_id, '_fac_url_page', TRUE );
+			$event_name = get_post_meta( $post_id, '_fac_url_event_name', TRUE );
+			$event_name = ! empty( $event_name ) ? $event_name : get_the_title( $post ) . ' - ' . $post_id;
+			if ( $track_page && $event_name ) {
 				?>
-                <script>fathom.trackGoal('<?php echo $page_event_id;?>', 0);</script>
+                <script id="fac-page-url" data-cfasync="false"
+                        data-pagespeed-no-defer type="text/javascript">
+                    window.addEventListener('load', (event) => {
+                        fathom.trackEvent('<?php echo $event_name;?>');
+                    });
+                </script>
 				<?php
 			}
 		}
-	}
-
-	// Send page event id to script.
-	public function fac_localize_script_data_url( $data ) {
-		global $post;
-		if ( is_singular() ) {
-			$post_id       = $post->ID;
-			$track_page    = get_post_meta( $post_id, '_fac_url_page', TRUE );
-			$page_event_id = get_post_meta( $post_id, '_fac_page_event_id', TRUE );
-			if ( $track_page && $page_event_id ) {
-				$data['page_event_id'] = $page_event_id;
-			}
-		}
-
-		return $data;
 	}
 
 }
