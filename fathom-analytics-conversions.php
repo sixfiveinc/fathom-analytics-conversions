@@ -14,9 +14,10 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Fathom Analytics Conversions
+ * Requires Plugins:  fathom-analytics
  * Plugin URI:        https://www.fathomconversions.com
  * Description:       Easily add event conversions in WordPress plugins to Fathom Analytics
- * Version:           1.1.1
+ * Version:           1.1.2
  * Author:            SixFive Pty Ltd
  * Author URI:        https://www.sixfive.io
  * License:           GPL-2.0+
@@ -35,7 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FATHOM_ANALYTICS_CONVERSIONS_VERSION', '1.1.1' );
+define( 'FATHOM_ANALYTICS_CONVERSIONS_VERSION', '1.1.2' );
 define( 'FAC4WP_PATH', plugin_dir_path( __FILE__ ) );
 
 global $fac4wp_plugin_url, $fac4wp_plugin_basename;

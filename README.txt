@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.7.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -141,6 +141,9 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.1.2 =
+* Added plugin dependencies
 
 = 1.1.1 =
 * Fixed redirection issue when using ajax submission. FIXES:https://wordpress.org/support/topic/version-1-1-breaks-gravity-forms-with-redirect-confirmation/
