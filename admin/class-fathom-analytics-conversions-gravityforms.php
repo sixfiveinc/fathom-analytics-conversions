@@ -3,7 +3,7 @@
  * The GravityForms-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.0
+ * @since      1.1.3
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/gravityforms
@@ -58,6 +58,11 @@ class Fathom_Analytics_Conversions_GravityForms {
 		// Add custom form attribute - form title.
 		add_filter( 'gform_form_tag', [ $this, 'fac_gform_form_tag' ], 10, 2 );
 
+		add_filter( 'gform_confirmation', [
+			$this,
+			'fac_gform_confirmation',
+		], 100, 2 );
+
 		// Add custom form element - form title.
 		add_filter( 'gform_form_after_open', [
 			$this,
@@ -93,6 +98,19 @@ class Fathom_Analytics_Conversions_GravityForms {
 	}
 
 	// Add custom form element - form title.
+	public function fac_gform_confirmation( $confirmation, $form ) {
+		//echo '<pre>';print_r($confirmation);echo '</pre>';
+		//echo '<div id="gform_name_' . $form['id'] . '" data-form-name="' . esc_html( $form['title'] ) . '"></div>';
+		if ( is_array( $confirmation ) && ! empty( $confirmation['redirect'] ) ) {
+			$confirmation['redirect'] = add_query_arg( [ 'fac_gf' => $form['title'] . ' [' . $form['id'] . ']' ], $confirmation['redirect'] );
+		} elseif ( is_string( $confirmation ) ) {
+			$confirmation .= '<div id="gform_name_' . $form['id'] . '" data-form-name="' . esc_html( $form['title'] ) . '"></div>';
+		}
+
+		return $confirmation;
+	}
+
+	// Add custom form element - form title.
 	public function fac_gform_form_after_open( $html, $form ) {
 		$html .= '<div id="gform_name_' . $form['id'] . '" data-form-name="' . esc_html( $form['title'] ) . '"></div>';
 
@@ -121,10 +139,26 @@ class Fathom_Analytics_Conversions_GravityForms {
 
 				$fac_content = '<script id="fac-gravity-forms" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
 				$fac_content .= 'jQuery(document).on("gform_confirmation_loaded", function(e, formId, confirmationMessage) {
-    var f = document.getElementById("gform_name_"+formId),
-    form_name = f.dataset.formName;
-    fathom.trackEvent(form_name + " ["+formId+"]");
+    var f = document.getElementById("gform_name_"+formId);
+    if( f ) {
+        var form_name = f.dataset.formName;
+        fathom.trackEvent(form_name + " ["+formId+"]");
+    }
 });';
+				$fac_content .= "\nfunction facGfGetUrlParameter(name) {
+	name = name.replace(/[\[\]]/g, '\\$&');
+	const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+	const results = regex.exec(window.location.href);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+window.addEventListener('load', (event) => {
+	const facGfValue = facGfGetUrlParameter('fac_gf');
+	if (facGfValue) {
+		fathom.trackEvent(facGfValue);
+	}
+});";
 				$fac_content .= '</script>';
 
 				echo $fac_content;
