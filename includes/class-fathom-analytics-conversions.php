@@ -7,7 +7,7 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.0
+ * @since      1.1.3.1
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/includes
@@ -208,7 +208,7 @@ class Fathom_Analytics_Conversions {
 
 		$plugin_i18n = new Fathom_Analytics_Conversions_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
 
