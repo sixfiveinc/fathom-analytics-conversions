@@ -4,7 +4,7 @@ Donate link: https://www.fathomconversions.com
 Tags: analytics, events, conversions, fathom
 Requires at least: 5.9
 Tested up to: 6.7.1
-Stable tag: 1.1.3.1
+Stable tag: 1.1.3.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -141,6 +141,9 @@ Please create a thread in the [WordPress plugin support](https://wordpress.org/s
 4. You will need an API Key from Fathom Analytics
 
 == Changelog ==
+
+= 1.1.3.2 =
+* Fixed PHP Notice: _load_textdomain_just_in_time running too soon.
 
 = 1.1.3.1 =
 * Fixed PHP Notice: load_plugin_textdomain running too soon. FIXES:https://wordpress.org/support/topic/load_textdomain-running-too-soon/
