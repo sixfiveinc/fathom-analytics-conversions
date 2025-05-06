@@ -282,11 +282,13 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 					$value     = (int) $value * 100;
 					$a_classes = explode( ',', $classes );
 					foreach ( $a_classes as $class ) {
-						$track_event[] = [
-							trim( $class ),
-							$name,
-							$value,
-						];
+						if ( ! empty( $class ) ) {
+							$track_event[] = [
+								trim( $class ),
+								$name,
+								$value,
+							];
+						}
 					}
 				}
 
