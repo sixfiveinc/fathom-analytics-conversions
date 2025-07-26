@@ -3,7 +3,7 @@
  * The URL-specific functionality of the plugin.
  *
  * @link       https://www.fathomconversions.com
- * @since      1.2
+ * @since      1.1.3.3
  *
  * @package    Fathom_Analytics_Conversions
  * @subpackage Fathom_Analytics_Conversions/url
@@ -159,8 +159,8 @@ class Fathom_Analytics_Conversions_URL {
 			return;
 		}
 
-		$link_to_fathom_event_value = filter_input( INPUT_POST, 'link_to_fathom_event', FILTER_SANITIZE_STRING );
-		$link_to_fathom_event_name  = filter_input( INPUT_POST, 'link_to_fathom_event_name', FILTER_SANITIZE_STRING );
+		$link_to_fathom_event_value = filter_input( INPUT_POST, 'link_to_fathom_event', FILTER_SANITIZE_SPECIAL_CHARS );
+		$link_to_fathom_event_name  = filter_input( INPUT_POST, 'link_to_fathom_event_name', FILTER_SANITIZE_SPECIAL_CHARS );
 
 		if ( $link_to_fathom_event_value ) {
 			update_post_meta( $post_id, '_fac_url_page', $link_to_fathom_event_value );

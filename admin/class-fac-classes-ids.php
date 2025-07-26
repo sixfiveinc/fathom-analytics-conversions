@@ -282,11 +282,13 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 					$value     = (int) $value * 100;
 					$a_classes = explode( ',', $classes );
 					foreach ( $a_classes as $class ) {
-						$track_event[] = [
-							trim( $class ),
-							$name,
-							$value,
-						];
+						if ( ! empty( $class ) ) {
+							$track_event[] = [
+								trim( $class ),
+								$name,
+								$value,
+							];
+						}
 					}
 				}
 
@@ -294,6 +296,9 @@ class Fathom_Analytics_Conversions_Classes_IDs {
 					$fac_content = '<script id="fac-classes-ids" data-cfasync="false" data-pagespeed-no-defer type="text/javascript">';
 					$fac_content .= 'window.addEventListener("load", (event) => {' . "\n\t";
 					foreach ( $track_event as $k => $event ) {
+                        if( empty( $event ) ) {
+                            continue;
+                        }
 						if ( strpos( $event[0], '#' ) === 0 ) {
 							$id          = substr( $event[0], 1 );
 							$fac_content .= 'const id_' . $k . ' = document.getElementById("' . $id . '");' . "\n\t";
